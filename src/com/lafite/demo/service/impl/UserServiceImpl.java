@@ -69,6 +69,6 @@ public class UserServiceImpl implements IUserService {
     public void fullInfo(Login login) throws Exception {
         User user = this.userDao.saveUser(login.getUser());
         login.setUser(user);
-        this.loginDao.save(login);
+        this.loginDao.fullInfo(login);
     }
 }

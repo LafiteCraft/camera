@@ -25,7 +25,7 @@ public class LoginDaoImpl extends BaseDao<Login> implements ILoginDao {
     }
 
     @Override
-    public void save(Login login) throws Exception {
+    public void fullInfo(Login login) throws Exception {
         this.save(login);
     }
 }

@@ -23,5 +23,5 @@ public interface ILoginDao {
      * @param login
      * @throws Exception
      */
-    void save(Login login) throws Exception;
+    void fullInfo(Login login) throws Exception;
 }
