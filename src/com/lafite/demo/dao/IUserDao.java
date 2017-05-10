@@ -12,4 +12,6 @@ public interface IUserDao {
     User findById(Integer userId) throws Exception;
 
     List<User> findAll() throws Exception;
+
+    User saveUser(User user) throws Exception;
 }

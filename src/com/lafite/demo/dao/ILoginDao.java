@@ -17,4 +17,11 @@ public interface ILoginDao {
      * @throws Exception
      */
     void register(Login login) throws Exception;
+
+    /**
+     * 保存
+     * @param login
+     * @throws Exception
+     */
+    void save(Login login) throws Exception;
 }

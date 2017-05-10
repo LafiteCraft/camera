@@ -5,4 +5,6 @@ package com.lafite.demo.dao;
  * @date: create on 2017/5/9
  */
 public interface IDailyDao {
+
+
 }

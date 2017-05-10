@@ -33,8 +33,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public List<User> findAll() throws Exception {
-        List<User> userList = new ArrayList<>();
-        userList = this.userDao.findAll();
+        List<User> userList = this.userDao.findAll();
         return userList;
     }
 
@@ -53,7 +52,23 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
+    @Transactional
     public void register(Login login) throws Exception {
-        this.userDao.saveLogin();
+        this.loginDao.register(login);
+    }
+
+    @Override
+    public int vaildateLoginName(String login_name) throws Exception {
+        List<Login> loginList = this.loginDao.selectLogin(login_name);
+        loginList = loginList == null ? new ArrayList<>() : loginList;
+        return loginList.size();
+    }
+
+    @Override
+    @Transactional
+    public void fullInfo(Login login) throws Exception {
+        User user = this.userDao.saveUser(login.getUser());
+        login.setUser(user);
+        this.loginDao.save(login);
     }
 }

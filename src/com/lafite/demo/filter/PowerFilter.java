@@ -24,7 +24,7 @@ public class PowerFilter implements Filter{
 
         HttpSession session = request.getSession();
         String loginMame = (String)session.getAttribute("login_name");
-        if (loginMame == null && !path.contains("login.action")) {
+        if (loginMame == null && !path.contains("user/")) {
             response.sendRedirect("/login.jsp");
         } else {
             filterChain.doFilter(servletRequest, servletResponse);

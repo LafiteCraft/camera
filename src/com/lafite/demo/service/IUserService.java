@@ -1,5 +1,6 @@
 package com.lafite.demo.service;
 
+import com.lafite.demo.entity.Login;
 import com.lafite.demo.entity.User;
 
 import java.util.List;
@@ -13,17 +14,27 @@ public interface IUserService {
 
     List<User> findAll() throws Exception;
 
+    int vaildate(String loginName, String password) throws Exception;
+
     /**
-     * 登陆验证
-     * 0 -- 代码异常
-     * 1 -- 登陆成功
-     * 2 -- 用户名不存在
-     * 3 -- 密码错误
-     * @param loginName
-     * @param password
+     * 用户注册
+     * @param login
+     * @throws Exception
+     */
+    void register(Login login) throws Exception;
+
+    /**
+     * 取得用户名数量用以判断是否有重复登录名
+     * @param login_name
      * @return
      * @throws Exception
      */
-    int vaildate(String loginName, String password) throws Exception;
+    int vaildateLoginName(String login_name) throws Exception;
 
+    /**
+     * 保存用户信息
+     * @param login
+     * @throws Exception
+     */
+    void fullInfo(Login login) throws Exception;
 }
