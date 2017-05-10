@@ -1,6 +1,7 @@
 package com.lafite.demo.controller;
 
 import com.google.gson.Gson;
+import com.lafite.demo.entity.Login;
 import com.lafite.demo.entity.User;
 import com.lafite.demo.service.IUserService;
 import org.apache.struts2.ServletActionContext;
@@ -89,6 +90,10 @@ public class UserAction implements ServletRequestAware {
         return result;
     }
 
+    /**
+     * 登录校验
+     * @return
+     */
     @Action("login")
     public String login () {
         Gson gson = new Gson();
@@ -109,6 +114,23 @@ public class UserAction implements ServletRequestAware {
             writer.print(gson.toJson(vaildataResult[code]));
             writer.flush();
             writer.close();
+        } catch (Exception e) {
+            result = "error";
+        }
+        return result;
+    }
+
+
+    public String register () {
+        String result = "success";
+        String loginName = request.getParameter("login_name");
+        String password = request.getParameter("password");
+        Login login = new Login();
+        login.setLoginName(loginName);
+        login.setPassword(password);
+
+        try {
+            this.userService.register(login);
         } catch (Exception e) {
             result = "error";
         }

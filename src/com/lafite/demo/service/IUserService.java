@@ -25,4 +25,5 @@ public interface IUserService {
      * @throws Exception
      */
     int vaildate(String loginName, String password) throws Exception;
+
 }

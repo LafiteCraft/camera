@@ -2,6 +2,7 @@ package com.lafite.demo.dao.impl;
 
 import com.lafite.demo.dao.BaseDao;
 import com.lafite.demo.dao.IUserDao;
+import com.lafite.demo.entity.Login;
 import com.lafite.demo.entity.User;
 import org.springframework.stereotype.Repository;
 

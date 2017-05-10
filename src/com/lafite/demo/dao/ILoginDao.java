@@ -10,4 +10,11 @@ import java.util.List;
  */
 public interface ILoginDao {
     List<Login> selectLogin(String loginName) throws Exception;
+
+    /**
+     * 用户注册
+     * @param login
+     * @throws Exception
+     */
+    void register(Login login) throws Exception;
 }

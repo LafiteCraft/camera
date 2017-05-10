@@ -18,4 +18,9 @@ public class LoginDaoImpl extends BaseDao<Login> implements ILoginDao {
         List<Login> loginList = this.selectByProperty("loginName", loginName);
         return loginList;
     }
+
+    @Override
+    public void register(Login login) throws Exception {
+        this.save(login);
+    }
 }

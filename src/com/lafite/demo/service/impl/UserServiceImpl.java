@@ -51,4 +51,9 @@ public class UserServiceImpl implements IUserService {
         }
         return result;
     }
+
+    @Override
+    public void register(Login login) throws Exception {
+        this.userDao.saveLogin();
+    }
 }
