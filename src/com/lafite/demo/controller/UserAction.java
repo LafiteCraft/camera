@@ -23,7 +23,7 @@ import java.util.List;
 @Namespace("/user")
 @ParentPackage("json-default")
 @Scope("singleton")
-@Results({@Result(name = "error", location = "view/error.jsp"),
+@Results({@Result(name = "error", location = "error/error.jsp"),
         @Result(name = "find_by_id_success", location = "/"),
         @Result(name = "find_all_success", location = "/"),
         @Result(name = "login_success", location = "/"),
