@@ -1,0 +1,7 @@
+/*公用样式*/
+.p10{  padding: 10px;  }
+/*学生信息编辑页面*/
+.infoTit{  border-bottom: 1px solid #81b0ea;  padding: 10px;  color: #9c9898;  }
+/*表单公用样式*/
+.form-radio{  margin-top: 5px;  }
+.form-radio label{  margin: 0 20px 0 5px;  }
