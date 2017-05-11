@@ -26,18 +26,20 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     @Transactional(readOnly = true)
-    public User findById(String userId) throws Exception {
-        User user = this.userDao.findById(Integer.parseInt(userId));
-        return user;
+    public Login findById(String userId) throws Exception {
+        Login login = this.loginDao.findById(userId);
+        return login;
     }
 
     @Override
-    public List<User> findAll() throws Exception {
-        List<User> userList = this.userDao.findAll();
-        return userList;
+    @Transactional(readOnly = true)
+    public List<Login> findAll() throws Exception {
+        List<Login> loginList = this.loginDao.findAll();
+        return loginList;
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Login> vaildate(String loginName, String password) throws Exception {
         List<Login> loginList = this.loginDao.selectLogin(loginName);
         return loginList;
@@ -46,21 +48,17 @@ public class UserServiceImpl implements IUserService {
     @Override
     @Transactional
     public void register(Login login) throws Exception {
+        User user = login.getUser();
+        this.userDao.saveUser(user);
+        login.setUser(user);
         this.loginDao.register(login);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public int vaildateLoginName(String login_name) throws Exception {
         List<Login> loginList = this.loginDao.selectLogin(login_name);
         loginList = loginList == null ? new ArrayList<>() : loginList;
         return loginList.size();
-    }
-
-    @Override
-    @Transactional
-    public void fullInfo(Login login) throws Exception {
-        User user = this.userDao.saveUser(login.getUser());
-        login.setUser(user);
-        this.loginDao.fullInfo(login);
     }
 }

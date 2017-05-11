@@ -57,7 +57,7 @@ public class UserAction implements ServletRequestAware {
         String userId = request.getParameter("userId");
         String result = "find_by_id_success";
         Gson gson = new Gson();
-        User user = null;
+        Login user = null;
         PrintWriter writer = null;
         try {
             user = this.userService.findById(userId);
@@ -85,7 +85,7 @@ public class UserAction implements ServletRequestAware {
         String result = "find_all_success";
         PrintWriter writer = null;
         try {
-            List<User> userList = this.userService.findAll();
+            List<Login> userList = this.userService.findAll();
 
             HttpServletResponse response = ServletActionContext.getResponse();
             writer = response.getWriter();
@@ -142,7 +142,7 @@ public class UserAction implements ServletRequestAware {
     }
 
     /**
-     * 用户注册
+     * 用户注册/更新
      * @return
      */
     @Action("register")
@@ -153,6 +153,15 @@ public class UserAction implements ServletRequestAware {
         Login login = new Login();
         login.setLoginName(loginName);
         login.setPassword(password);
+
+        User user = new User();
+        user.setName(request.getParameter("name"));
+        user.setBirth(request.getParameter("birth"));
+        user.setQq(request.getParameter("qq"));
+        user.setPhone(request.getParameter("phone"));
+        user.setSex(request.getParameter("sex"));
+
+        login.setUser(user);
         Gson gson = new Gson();
         PrintWriter writer = null;
         try {
@@ -186,37 +195,6 @@ public class UserAction implements ServletRequestAware {
             writer.print(countName);
             writer.flush();
             writer.close();
-        } catch (Exception e) {
-            result = "error";
-        }
-        return result;
-    }
-
-    /**
-     * 完善用户信息，其实也就是写入user表一些数据
-     * @return
-     */
-    @Action("full_info")
-    public String fullInfo () {
-        String result = "full_success";
-        HttpSession session = request.getSession();
-        Login login = (Login) session.getAttribute("login");
-        String name = request.getParameter("name");
-        String birth = request.getParameter("birth");
-        String sex = request.getParameter("sex");
-        String qq = request.getParameter("qq");
-        String phone = request.getParameter("phone");
-
-        User user = new User();
-        user.setName(name);
-        user.setBirth(birth);
-        user.setSex(sex);
-        user.setQq(qq);
-        user.setPhone(phone);
-        login.setUser(user);
-
-        try {
-            this.userService.fullInfo(login);
         } catch (Exception e) {
             result = "error";
         }

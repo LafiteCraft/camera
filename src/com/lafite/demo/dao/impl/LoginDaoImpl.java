@@ -28,4 +28,14 @@ public class LoginDaoImpl extends BaseDao<Login> implements ILoginDao {
     public void fullInfo(Login login) throws Exception {
         this.save(login);
     }
+
+    @Override
+    public Login findById(String userId) throws Exception {
+        return this.selectById(Integer.parseInt(userId));
+    }
+
+    @Override
+    public List<Login> findAll() throws Exception {
+        return this.selectAll();
+    }
 }

@@ -24,4 +24,14 @@ public interface ILoginDao {
      * @throws Exception
      */
     void fullInfo(Login login) throws Exception;
+
+    /**
+     * 全部用户信息
+     * @param userId
+     * @return
+     * @throws Exception
+     */
+    Login findById(String userId) throws Exception;
+
+    List<Login> findAll() throws Exception;
 }

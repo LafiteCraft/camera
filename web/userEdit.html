@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="static/h-ui/css/H-ui.min.css" rel="stylesheet">
+
+</head>
+<body>
+<div class="container-fluid">
+    <form method="post" class="form form-horizontal" id="userform">
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3">姓名：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" name="name" id="name" >
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3">登录名：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" name="login_name" id="login_name" >
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3">密码：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="password" class="input-text" name="password" id="password" >
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3">性别：</label>
+            <div class="formControls skin-minimal col-xs-8 col-sm-9">
+                <input type="radio" id="male" name="sex" value="M">
+                <label>男</label>
+                <input type="radio" id="female" name="sex" value="F">
+                <label>女</label>
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3">手机号码：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" name="phone" id="phone">
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3">QQ：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" name="qq" id="qq">
+            </div>
+        </div>
+        <div class="row cl">
+            <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+                <input class="btn btn-primary radius" type="button" value="提交" id="save">
+                <input class="btn btn-default radius" type="button" value="取消" id="close">
+            </div>
+        </div>
+    </form>
+</div>
+<script type="text/javascript" src="lib/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="static/system/js/main.js"></script>
+<script>
+    var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+    var request = GetRequest();
+    var type = request.type;
+
+    if(type === 'edit'){
+        $.ajax({
+            url : 'user/findById.action',
+            data : {
+                userId : request.id
+            },
+            type : 'post',
+            success : function(data){
+                var data = JSON.parse(data);
+                for(i in data){
+                    if(i === 'user'){
+                       for(var j in data[i]){
+                           if(j === 'sex'){
+                               if(data[i][j] === 'M'){
+                                    $('#male').prop('checked','checked');
+                               }else{
+                                   $('#female').prop('checked','checked');
+                               }
+                           }else{
+                               $('#' + j).val(data[i][j]);
+                           }
+                       }
+                    }else{
+                        $('#' + i).val(data[i]);
+                    }
+                }
+            },
+            error : function(){
+                layer.msg('服务器错误',{icon : 2});
+            }
+        })
+    }
+
+    $("#save").on("click",function(){
+        $.ajax({
+            url : 'user/register.action	',
+            type : 'post',
+            data : {
+                login_name : $("#loginName").val(),
+                name : $("#name").val(),
+                sex : document.getElementsByName('sex').value,
+                qq : $('#qq').val(),
+                phone : $('#phone').val(),
+                password : $('#password').val()
+            },
+            success : function(data){
+                debugger
+            },
+            error : function(){
+                layer.msg('保存失败',{icon : 2});
+                setTimeout(function(){parent.layer.close(index);},1000)
+            }
+        })
+    })
+
+    $("#close").on("click",function(){
+        parent.layer.close(index); //再执行关闭
+    })
+</script>
+<script>
+</script>
+</body>
+</html>

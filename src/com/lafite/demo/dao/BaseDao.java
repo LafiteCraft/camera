@@ -54,7 +54,7 @@ public class BaseDao<T extends Serializable> extends HibernateDaoSupport {
 	 * @throws Exception
 	 */
 	protected void openSession() throws Exception {
-		this.session = this.getSessionFactory().openSession();
+		this.session = this.getSessionFactory().getCurrentSession();
 	}
 
 	/**

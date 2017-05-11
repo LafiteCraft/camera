@@ -30,7 +30,7 @@ CREATE TABLE `camera` (
   `place` varchar(45) DEFAULT NULL,
   `url` varchar(128) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -39,6 +39,7 @@ CREATE TABLE `camera` (
 
 LOCK TABLES `camera` WRITE;
 /*!40000 ALTER TABLE `camera` DISABLE KEYS */;
+INSERT INTO `camera` VALUES (1,'测试摄像头','我想我也不知道这是在什么地方','place001/camera001');
 /*!40000 ALTER TABLE `camera` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -57,7 +58,7 @@ CREATE TABLE `daily` (
   PRIMARY KEY (`id`),
   KEY `fk_daily_login_idx` (`login_id`),
   CONSTRAINT `fk_daily_login` FOREIGN KEY (`login_id`) REFERENCES `login` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -66,6 +67,7 @@ CREATE TABLE `daily` (
 
 LOCK TABLES `daily` WRITE;
 /*!40000 ALTER TABLE `daily` DISABLE KEYS */;
+INSERT INTO `daily` VALUES (1,1,'test','test');
 /*!40000 ALTER TABLE `daily` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -84,7 +86,7 @@ CREATE TABLE `login` (
   PRIMARY KEY (`id`),
   KEY `fk_user_login_idx` (`user_id`),
   CONSTRAINT `fk_user_login` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -93,7 +95,7 @@ CREATE TABLE `login` (
 
 LOCK TABLES `login` WRITE;
 /*!40000 ALTER TABLE `login` DISABLE KEYS */;
-INSERT INTO `login` VALUES (1,'lafite','lafite123',1),(2,'error','error123',1),(3,'test','test123',NULL),(4,'yika','yika123',NULL),(5,'yika','yika123',NULL),(6,'yika','yika123',NULL);
+INSERT INTO `login` VALUES (1,'lafite','lafite123',1),(2,'error','error123',1),(3,'test','test123',1),(4,'yika','yika123',1),(5,'yika','yika123',1),(6,'yika','yika123',1),(8,NULL,'lafite123',5),(9,NULL,'lafite123',6),(10,NULL,'lafite123',7),(11,NULL,'lafite123',8),(12,NULL,'lafite123',9);
 /*!40000 ALTER TABLE `login` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -105,14 +107,14 @@ DROP TABLE IF EXISTS `user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) DEFAULT NULL,
   `birth` varchar(45) DEFAULT NULL,
   `sex` char(1) DEFAULT NULL,
   `qq` varchar(45) DEFAULT NULL,
   `phone` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -121,7 +123,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'LafiteHao','80-01-07','M','375199496','18554653013'),(2,'LafiteHao','80-01-07','M','375199496','18554653013'),(3,'LafiteHao','80-01-07','M','375199496','18554653013'),(4,'LafiteHao','80-01-07','M','375199496','18554653013');
+INSERT INTO `user` VALUES (1,'LafiteHao','80-01-07','M','375199496','18554653013'),(2,'LafiteHao','80-01-07','M','375199496','18554653013'),(3,'LafiteHao','80-01-07','M','375199496','18554653013'),(4,'LafiteHao','80-01-07','M','375199496','18554653013'),(5,'LafiteHao',NULL,NULL,'375199496','18554653013'),(6,'LafiteHao',NULL,NULL,'375199496','18554653013'),(7,'LafiteHao',NULL,NULL,'375199496','18554653013'),(8,'LafiteHao',NULL,NULL,'375199496','18554653013'),(9,'LafiteHao',NULL,NULL,'375199496','18554653013');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -134,4 +136,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-05-11 16:21:26
+-- Dump completed on 2017-05-11 22:30:57

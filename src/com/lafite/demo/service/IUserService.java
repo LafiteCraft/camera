@@ -1,7 +1,6 @@
 package com.lafite.demo.service;
 
 import com.lafite.demo.entity.Login;
-import com.lafite.demo.entity.User;
 
 import java.util.List;
 
@@ -10,9 +9,9 @@ import java.util.List;
  * @date: create on 2017/5/9
  */
 public interface IUserService {
-    User findById(String userId) throws Exception;
+    Login findById(String userId) throws Exception;
 
-    List<User> findAll() throws Exception;
+    List<Login> findAll() throws Exception;
 
     List<Login> vaildate(String loginName, String password) throws Exception;
 
@@ -30,11 +29,4 @@ public interface IUserService {
      * @throws Exception
      */
     int vaildateLoginName(String login_name) throws Exception;
-
-    /**
-     * 保存用户信息
-     * @param login
-     * @throws Exception
-     */
-    void fullInfo(Login login) throws Exception;
 }
