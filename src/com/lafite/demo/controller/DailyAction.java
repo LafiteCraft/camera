@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Scope;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.PrintWriter;
 import java.util.List;
 
@@ -26,6 +27,8 @@ import java.util.List;
 @Scope("singleton")
 @Results({@Result(name = "error", location = "view/error.jsp"),
         @Result(name = "findInfo_success", location = "/"),
+        @Result(name = "findAll_success", location = "/"),
+        @Result(name = "findByTitle_success", location = "/"),
         @Result(name = "remove_success", location = "/"),
         @Result(name = "save_success", location = "/")})
 public class DailyAction implements ServletRequestAware {
@@ -134,9 +137,9 @@ public class DailyAction implements ServletRequestAware {
     public String save () {
         String result = "save_success";
         Daily daily = new Daily();
-        Login login = new Login();
+        HttpSession session = request.getSession();
+        Login login = (Login) session.getAttribute("login   ");
         daily.setContent(request.getParameter("content"));
-        login.setId(Integer.parseInt(request.getParameter("login_id")));
         daily.setLogin(login);
         daily.setTitle(request.getParameter("title"));
         try {

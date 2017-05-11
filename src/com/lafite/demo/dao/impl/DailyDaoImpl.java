@@ -16,7 +16,7 @@ import java.util.List;
 public class DailyDaoImpl extends BaseDao<Daily> implements IDailyDao {
     @Override
     public Daily findById(String id) throws Exception {
-        return this.selectById(id);
+        return this.selectById(Integer.parseInt(id));
     }
 
     @Override

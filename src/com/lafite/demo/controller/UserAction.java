@@ -199,14 +199,14 @@ public class UserAction implements ServletRequestAware {
     @Action("full_info")
     public String fullInfo () {
         String result = "full_success";
-        String loginId = request.getParameter("login_id");
+        HttpSession session = request.getSession();
+        Login login = (Login) session.getAttribute("login");
         String name = request.getParameter("name");
         String birth = request.getParameter("birth");
         String sex = request.getParameter("sex");
         String qq = request.getParameter("qq");
         String phone = request.getParameter("phone");
 
-        Login login = new Login();
         User user = new User();
         user.setName(name);
         user.setBirth(birth);

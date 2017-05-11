@@ -23,6 +23,8 @@ import java.util.List;
 @Scope("singleton")
 @Results({@Result(name = "error", location = "view/error.jsp"),
         @Result(name = "findInfo_success", location = "/"),
+        @Result(name = "findByName_success", location = "/"),
+        @Result(name = "findAll", location = "/"),
         @Result(name = "remove_success", location = "/"),
         @Result(name = "save_success", location = "/")})
 public class CameraAction implements ServletRequestAware {
@@ -86,9 +88,9 @@ public class CameraAction implements ServletRequestAware {
      * 通过名字查找
      * @return
      */
-    @Action("findByTitle")
-    public String findByTitle () {
-        String result = "findByTitle_success";
+    @Action("findByName")
+    public String findByName () {
+        String result = "findByName_success";
         String name = request.getParameter("name");
         PrintWriter writer = null;
         Gson gson = new Gson();

@@ -25,6 +25,8 @@ public class Daily implements Serializable {
         this.id = id;
     }
 
+    @OneToOne
+    @JoinColumn(name = "login_id", unique = true)
     public Login getLogin() {
         return login;
     }

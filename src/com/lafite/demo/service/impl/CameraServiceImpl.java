@@ -3,6 +3,7 @@ package com.lafite.demo.service.impl;
 import com.lafite.demo.dao.ICameraDao;
 import com.lafite.demo.entity.Camera;
 import com.lafite.demo.service.ICameraService;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
  * @author LafiteHao
  * @create 2017-05-11 15:08
  **/
+@Service("cameraService")
 public class CameraServiceImpl implements ICameraService{
 
     @Resource(name = "cameraDao")
