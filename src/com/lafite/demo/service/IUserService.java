@@ -14,7 +14,7 @@ public interface IUserService {
 
     List<User> findAll() throws Exception;
 
-    int vaildate(String loginName, String password) throws Exception;
+    List<Login> vaildate(String loginName, String password) throws Exception;
 
     /**
      * 用户注册

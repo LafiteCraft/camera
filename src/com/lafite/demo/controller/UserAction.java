@@ -116,15 +116,23 @@ public class UserAction implements ServletRequestAware {
 
         PrintWriter writer = null;
         try {
-            int code = this.userService.vaildate(loginName, password);
-            if (code == 1) {
+            int code = 0;
+            List<Login> loginList = this.userService.vaildate(loginName, password);
+            if (loginList.size() == 0) {
+                code = 2;
+            } else if (loginList.get(0).getPassword().equals(password)) {
+                code = 1;
                 HttpSession session = request.getSession();
-                session.setAttribute("login_name", loginName);
+                Login login = new Login();
+                session.setAttribute("login", loginList.get(0));
+            } else {
+                code = 3;
             }
+
             HttpServletResponse response = ServletActionContext.getResponse();
             response.setHeader("Content-type", "text/html;charset=UTF-8");
             writer = response.getWriter();
-            writer.print(gson.toJson(vaildataResult[code]));
+            writer.print(vaildataResult[code]);
             writer.flush();
             writer.close();
         } catch (Exception e) {

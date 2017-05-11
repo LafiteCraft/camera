@@ -14,10 +14,6 @@ public class Login implements Serializable {
     private String password;
     private User user;
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     @Column(name = "id", nullable = false)

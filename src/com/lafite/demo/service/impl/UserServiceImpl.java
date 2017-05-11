@@ -38,17 +38,9 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public int vaildate(String loginName, String password) throws Exception {
-        int result = 0;
+    public List<Login> vaildate(String loginName, String password) throws Exception {
         List<Login> loginList = this.loginDao.selectLogin(loginName);
-        if (loginList.size() == 0) {
-            result = 2;
-        } else if (loginList.get(0).getPassword().equals(password)) {
-            result = 1;
-        } else {
-            result = 3;
-        }
-        return result;
+        return loginList;
     }
 
     @Override

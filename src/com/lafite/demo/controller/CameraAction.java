@@ -1,9 +1,8 @@
 package com.lafite.demo.controller;
 
 import com.google.gson.Gson;
-import com.lafite.demo.entity.Daily;
-import com.lafite.demo.entity.Login;
-import com.lafite.demo.service.IDailyService;
+import com.lafite.demo.entity.Camera;
+import com.lafite.demo.service.ICameraService;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.*;
 import org.apache.struts2.interceptor.ServletRequestAware;
@@ -16,22 +15,19 @@ import java.io.PrintWriter;
 import java.util.List;
 
 /**
- * 日报模块
- *
  * @author LafiteHao
- * @create 2017-05-10 17:24
+ * @create 2017-05-11 15:37
  **/
-@Namespace("/daily")
+@Namespace("/camera")
 @ParentPackage("json-default")
 @Scope("singleton")
 @Results({@Result(name = "error", location = "view/error.jsp"),
         @Result(name = "findInfo_success", location = "/"),
         @Result(name = "remove_success", location = "/"),
         @Result(name = "save_success", location = "/")})
-public class DailyAction implements ServletRequestAware {
-
-    @Resource(name = "dailyService")
-    private IDailyService dailyService;
+public class CameraAction implements ServletRequestAware {
+    @Resource(name = "cameraService")
+    private ICameraService cameraService;
     private HttpServletRequest request;
 
     @Override
@@ -40,21 +36,21 @@ public class DailyAction implements ServletRequestAware {
     }
 
     /**
-     * 查看单条日报
+     * 查看单个摄像头
      * @return
      */
     @Action("findInfo")
     public String findInfo () {
         String result = "findInfo_success";
-        String id = request.getParameter("daily_id");
+        String id = request.getParameter("camera_id");
         PrintWriter writer = null;
         Gson gson = new Gson();
         try {
-            Daily daily = this.dailyService.findById(id);
+            Camera camera = this.cameraService.findById(Integer.parseInt(id));
             HttpServletResponse response = ServletActionContext.getResponse();
             response.setHeader("Content-type", "text/html;charset=UTF-8");
             writer = response.getWriter();
-            writer.print(gson.toJson(daily));
+            writer.print(gson.toJson(camera));
             writer.flush();
             writer.close();
         } catch (Exception e) {
@@ -73,11 +69,11 @@ public class DailyAction implements ServletRequestAware {
         PrintWriter writer = null;
         Gson gson = new Gson();
         try {
-            List<Daily> dailyList = this.dailyService.findAll();
+            List<Camera> cameraList = this.cameraService.findAll();
             HttpServletResponse response = ServletActionContext.getResponse();
             response.setHeader("Content-type", "text/html;charset=UTF-8");
             writer = response.getWriter();
-            writer.print(gson.toJson(dailyList));
+            writer.print(gson.toJson(cameraList));
             writer.flush();
             writer.close();
         } catch (Exception e) {
@@ -87,21 +83,21 @@ public class DailyAction implements ServletRequestAware {
     }
 
     /**
-     * 通过标题查找
+     * 通过名字查找
      * @return
      */
     @Action("findByTitle")
     public String findByTitle () {
         String result = "findByTitle_success";
-        String title = request.getParameter("title");
+        String name = request.getParameter("name");
         PrintWriter writer = null;
         Gson gson = new Gson();
         try {
-            List<Daily> dailyList = this.dailyService.findByTitle(title);
+            List<Camera> cameraList = this.cameraService.findByName(name);
             HttpServletResponse response = ServletActionContext.getResponse();
             response.setHeader("Content-type", "text/html;charset=UTF-8");
             writer = response.getWriter();
-            writer.print(gson.toJson(dailyList));
+            writer.print(gson.toJson(cameraList));
             writer.flush();
             writer.close();
         } catch (Exception e) {
@@ -111,15 +107,15 @@ public class DailyAction implements ServletRequestAware {
     }
 
     /**
-     * 删除日报，不好意思，我实在懒得做逻辑删除。
+     * 删除摄像头，不好意思，我实在懒得做逻辑删除。
      * @return
      */
     @Action("remove")
     public String remove () {
         String result = "remove_success";
-        String id = request.getParameter("daily_id");
+        String id = request.getParameter("camera_id");
         try {
-            this.dailyService.remove(Integer.parseInt(id));
+            this.cameraService.delete(Integer.parseInt(id));
         } catch (Exception e) {
             result = "error";
         }
@@ -133,14 +129,12 @@ public class DailyAction implements ServletRequestAware {
     @Action("save")
     public String save () {
         String result = "save_success";
-        Daily daily = new Daily();
-        Login login = new Login();
-        daily.setContent(request.getParameter("content"));
-        login.setId(Integer.parseInt(request.getParameter("login_id")));
-        daily.setLogin(login);
-        daily.setTitle(request.getParameter("title"));
+        Camera camera = new Camera();
+        camera.setName(request.getParameter("name"));
+        camera.setPlace(request.getParameter("place"));
+        camera.setUrl(request.getParameter("url"));
         try {
-            this.dailyService.save(daily);
+            this.cameraService.save(camera);
         } catch (Exception e) {
             result = "error";
         }

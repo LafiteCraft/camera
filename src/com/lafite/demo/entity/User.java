@@ -1,9 +1,6 @@
 package com.lafite.demo.entity;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**
@@ -19,11 +16,8 @@ public class User implements Serializable {
     private String qq;
     private String phone;
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     public Integer getId() {
         return id;
