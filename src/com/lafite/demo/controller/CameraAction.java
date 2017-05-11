@@ -60,7 +60,7 @@ public class CameraAction implements ServletRequestAware {
     }
 
     /**
-     * 查看全部日报
+     * 查看全部摄像头
      * @return
      */
     @Action("findAll")
@@ -123,7 +123,7 @@ public class CameraAction implements ServletRequestAware {
     }
 
     /**
-     * 保存日报
+     * 保存摄像头信息
      * @return
      */
     @Action("save")
