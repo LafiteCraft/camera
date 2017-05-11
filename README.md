@@ -16,8 +16,7 @@ sex,qq,phone```|无|
 |通过标题查找|```daily/findByTitle.action```|```title```|参上|
 |删除日报，不好意思，我实在懒得做逻辑删除。|```daily/remove.action```|```daily_id```|无|
 |保存日报|```daily/save.action```|```content,title```|无|
-|查看单条摄像头信息|```camera/findInfo.action`摄像头信息|```camera_id```|```[{"id":1,
-"name":"测试摄像头","place":"我想我也不知道这是在什么地方","url":"place001/camera001"}]```|
+|查看单条摄像头信息|```camera/findInfo.action```|```camera_id```|```[{"id":1,"name":"测试摄像头","place":"我想我也不知道这是在什么地方","url":"place001/camera001"}]```|
 |查看全部摄像头|```camera/findAll.action```||参上|
 |通过标题查找|```camera/findByName.action```|```name```|参上|
 |删除摄像头，不好意思，我实在懒得做逻辑删除。|```camera/remove.action```|```camera_id```|无|
