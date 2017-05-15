@@ -33,7 +33,9 @@ public class DailyDaoImpl extends BaseDao<Daily> implements IDailyDao {
 
     @Override
     public void delete(int id) throws Exception {
-        this.delete(id);
+        Daily daily = new Daily();
+        daily.setId(id);
+        super.delete(daily);
     }
 
     @Override

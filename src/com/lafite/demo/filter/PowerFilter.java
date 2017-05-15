@@ -26,10 +26,32 @@ public class PowerFilter implements Filter{
 
         HttpSession session = request.getSession();
         User user = (User)session.getAttribute("login");
-        if (user == null && !path.contains("user/register.action") && !path.contains("user/login.action")) {
-            response.sendRedirect("/login.html");
+        user = user == null ? new User() : user;
+        String type = user.getType();
+        if (path.contains("user")) {
+            if (path.contains("user/register.action") || path.contains("user/login.action")) {
+                filterChain.doFilter(servletRequest, servletResponse);
+            } else {
+                if (type.equals("2")) {
+                    response.sendRedirect("/login.html");
+                } else {
+                    filterChain.doFilter(servletRequest, servletResponse);
+                }
+            }
+        } else if (path.contains("camera")){
+            if (type.equals(0)) {
+                response.sendRedirect("/login.html");
+            } else {
+                filterChain.doFilter(servletRequest, servletResponse);
+            }
+        } else if (path.contains("daily")) {
+            if (type.equals(1)) {
+                filterChain.doFilter(servletRequest, servletResponse);
+            } else {
+                response.sendRedirect("/login.html");
+            }
         } else {
-            filterChain.doFilter(servletRequest, servletResponse);
+            response.sendRedirect("/login.html");
         }
     }
 

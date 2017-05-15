@@ -2,6 +2,7 @@ package com.lafite.demo.service.impl;
 
 import com.lafite.demo.dao.IDailyDao;
 import com.lafite.demo.entity.Daily;
+import com.lafite.demo.entity.User;
 import com.lafite.demo.service.IDailyService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,9 +51,18 @@ public class DailyServiceImpl implements IDailyService {
         this.dailyDao.saveOrUpdate(daily);
     }
 
-    @Override
-    public void refer(Daily daily) throws Exception {
-        this.dailyDao.saveOrUpdate(daily);
-    }
+//    @Override
+//    @Transactional
+//    public void refer(Daily daily) throws Exception {
+//        int id = daily.getId();
+//        Daily old = this.dailyDao.findById(id + "");
+//        old = old == null ? new Daily() : old;
+//        User user = daily.getUserByInquirerId();
+//        old.setUserByInquirerId(daily.getUserByInquirerId());
+//        old.setInquirerId(user.getId());
+//        old.setInquirerName(user.getName());
+//        old.setFeedback(daily.getFeedback());
+//        this.dailyDao.saveOrUpdate(old);
+//    }
 
 }

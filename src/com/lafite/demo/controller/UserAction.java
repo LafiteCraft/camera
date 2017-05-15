@@ -157,6 +157,7 @@ public class UserAction implements ServletRequestAware {
         user.setQq(request.getParameter("qq"));
         user.setPhone(request.getParameter("phone"));
         user.setSex(request.getParameter("sex"));
+        user.setType(request.getParameter("type"));
         user.setLoginName(loginName);
         user.setPassword(password);
 

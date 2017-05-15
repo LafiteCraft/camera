@@ -173,7 +173,7 @@ public class Daily implements Serializable {
     }
 
     @ManyToOne
-    @JoinColumn(name = "person_id", referencedColumnName = "id")
+    @JoinColumn(name = "person_id", referencedColumnName = "id", insertable = false ,updatable = false)
     public User getUserByPersonId() {
         return userByPersonId;
     }
@@ -183,7 +183,7 @@ public class Daily implements Serializable {
     }
 
     @ManyToOne
-    @JoinColumn(name = "inquirer_id", referencedColumnName = "id")
+    @JoinColumn(name = "inquirer_id", referencedColumnName = "id", insertable = false ,updatable = false)
     public User getUserByInquirerId() {
         return userByInquirerId;
     }

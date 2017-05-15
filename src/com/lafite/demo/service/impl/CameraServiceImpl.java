@@ -16,7 +16,7 @@ import java.util.List;
 @Service("cameraService")
 public class CameraServiceImpl implements ICameraService{
 
-    @Resource(name = "cameradao")
+    @Resource(name = "cameraDao")
     private ICameraDao cameraDao;
 
     @Override

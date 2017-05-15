@@ -21,7 +21,7 @@ public class CameraDaoImpl extends BaseDao<Camera> implements ICameraDao{
 
     @Override
     public List<Camera> findByName(String name) throws Exception {
-        return this.selectByProperty("cameraName", name);
+        return this.selectByProperty("name", name);
     }
 
     @Override
@@ -31,7 +31,9 @@ public class CameraDaoImpl extends BaseDao<Camera> implements ICameraDao{
 
     @Override
     public void delete(int id) throws Exception {
-        this.delete(id);
+        Camera camera = new Camera();
+        camera.setId(id);
+        super.delete(camera);
     }
 
     @Override

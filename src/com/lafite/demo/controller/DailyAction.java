@@ -142,6 +142,8 @@ public class DailyAction implements ServletRequestAware {
         User user = (User) session.getAttribute("login   ");
         daily.setContent(request.getParameter("content"));
         daily.setUserByPersonId(user);
+        daily.setPersonId(user.getId());
+        daily.setPersonName(user.getName());
         daily.setTitle(request.getParameter("title"));
         try {
             this.dailyService.save(daily);
@@ -161,16 +163,16 @@ public class DailyAction implements ServletRequestAware {
         HttpSession session = request.getSession();
 
         String id = request.getParameter("id");
-        String content = request.getParameter("content");
+        String feedback = request.getParameter("feedback");
         User user = (User) session.getAttribute("user");
 
         Daily daily = new Daily();
         daily.setId(Integer.parseInt(id));
-        daily.setContent(content);
+        daily.setFeedback(feedback);
         daily.setUserByInquirerId(user);
 
         try {
-            this.dailyService.refer(daily);
+            this.dailyService.save(daily);
         } catch (Exception e) {
             result = "error";
         }

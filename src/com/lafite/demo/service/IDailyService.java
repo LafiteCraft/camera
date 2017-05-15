@@ -19,5 +19,5 @@ public interface IDailyService {
 
     void save(Daily daily) throws Exception;
 
-    void refer(Daily daily) throws Exception;
+//    void refer(Daily daily) throws Exception;
 }

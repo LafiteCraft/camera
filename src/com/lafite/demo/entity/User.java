@@ -1,8 +1,10 @@
 package com.lafite.demo.entity;
 
-import javax.persistence.*;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.io.Serializable;
-import java.util.Collection;
 
 /**
  * @author LafiteHao
@@ -18,8 +20,7 @@ public class User implements Serializable {
     private String phone;
     private String loginName;
     private String password;
-    private Collection<Daily> dailiesById;
-    private Collection<Daily> dailiesById_0;
+    private String type;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -92,6 +93,16 @@ public class User implements Serializable {
     }
 
     @Basic
+    @Column(name = "type", nullable = true, length = 1)
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    @Basic
     @Column(name = "password", nullable = true, length = 45)
     public String getPassword() {
         return password;
@@ -116,6 +127,7 @@ public class User implements Serializable {
         if (phone != null ? !phone.equals(user.phone) : user.phone != null) return false;
         if (loginName != null ? !loginName.equals(user.loginName) : user.loginName != null) return false;
         if (password != null ? !password.equals(user.password) : user.password != null) return false;
+        if (type != null ? !type.equals(user.type) : user.type != null) return false;
 
         return true;
     }
@@ -130,24 +142,7 @@ public class User implements Serializable {
         result = 31 * result + (phone != null ? phone.hashCode() : 0);
         result = 31 * result + (loginName != null ? loginName.hashCode() : 0);
         result = 31 * result + (password != null ? password.hashCode() : 0);
+        result = 31 * result + (type != null ? type.hashCode() : 0);
         return result;
-    }
-
-    @OneToMany(mappedBy = "userByPersonId")
-    public Collection<Daily> getDailiesById() {
-        return dailiesById;
-    }
-
-    public void setDailiesById(Collection<Daily> dailiesById) {
-        this.dailiesById = dailiesById;
-    }
-
-    @OneToMany(mappedBy = "userByInquirerId")
-    public Collection<Daily> getDailiesById_0() {
-        return dailiesById_0;
-    }
-
-    public void setDailiesById_0(Collection<Daily> dailiesById_0) {
-        this.dailiesById_0 = dailiesById_0;
     }
 }

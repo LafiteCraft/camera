@@ -8,7 +8,7 @@ public class BeanFactory {
 	private static ApplicationContext context;
 	
 	static{		
-		context = new ClassPathXmlApplicationContext("applicationContext.xml");		
+		context = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
 	}
 	
 	public static ApplicationContext getApplicationContext(){
