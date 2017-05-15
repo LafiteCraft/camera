@@ -1,5 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS `demo` /*!40100 DEFAULT CHARACTER SET utf8 */;
-USE `demo`;
 -- MySQL dump 10.13  Distrib 5.7.17, for Win64 (x86_64)
 --
 -- Host: localhost    Database: demo
@@ -26,11 +24,13 @@ DROP TABLE IF EXISTS `camera`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `camera` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `code` varchar(45) DEFAULT NULL,
   `name` varchar(45) DEFAULT NULL,
   `place` varchar(45) DEFAULT NULL,
   `url` varchar(128) DEFAULT NULL,
+  `time` date DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -39,7 +39,7 @@ CREATE TABLE `camera` (
 
 LOCK TABLES `camera` WRITE;
 /*!40000 ALTER TABLE `camera` DISABLE KEYS */;
-INSERT INTO `camera` VALUES (1,'测试摄像头','我想我也不知道这是在什么地方','place001/camera001');
+INSERT INTO `camera` VALUES (2,NULL,'摄像头','我想我也不知道这是在什么地方','place001/camera001',NULL),(3,NULL,'摄像头','我想我也不知道这是在什么地方','place001/camera001',NULL),(4,NULL,'测试摄像头','我想我也不知道这是在什么地方','place001/camera001',NULL),(5,'lafite-1','lafite摄像头',NULL,'blabla','2017-05-15');
 /*!40000 ALTER TABLE `camera` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -52,13 +52,22 @@ DROP TABLE IF EXISTS `daily`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `daily` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `login_id` int(11) DEFAULT NULL,
+  `person_id` int(11) DEFAULT NULL,
+  `person_name` varchar(45) DEFAULT NULL,
   `title` varchar(45) DEFAULT NULL,
   `content` varchar(1024) DEFAULT NULL,
+  `type` varchar(45) DEFAULT NULL,
+  `time` date DEFAULT NULL,
+  `isRefer` char(1) DEFAULT NULL,
+  `inquirer_id` int(11) DEFAULT NULL,
+  `inquirer_name` varchar(45) DEFAULT NULL,
+  `feedback` varchar(1024) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_daily_login_idx` (`login_id`),
-  CONSTRAINT `fk_daily_login` FOREIGN KEY (`login_id`) REFERENCES `login` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+  KEY `fk_daily_login_idx` (`person_id`),
+  KEY `fk_daily_login_1_idx` (`inquirer_id`),
+  CONSTRAINT `fk_daily_login` FOREIGN KEY (`person_id`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_daily_login_1` FOREIGN KEY (`inquirer_id`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -67,36 +76,8 @@ CREATE TABLE `daily` (
 
 LOCK TABLES `daily` WRITE;
 /*!40000 ALTER TABLE `daily` DISABLE KEYS */;
-INSERT INTO `daily` VALUES (1,1,'test','test');
+INSERT INTO `daily` VALUES (1,1,NULL,'test','test',NULL,NULL,NULL,NULL,NULL,NULL),(3,NULL,NULL,NULL,'This is a test!',NULL,NULL,NULL,NULL,NULL,NULL),(4,1,NULL,'test','test',NULL,NULL,NULL,NULL,NULL,NULL),(5,1,NULL,'test','test',NULL,NULL,NULL,NULL,NULL,NULL),(6,1,NULL,'test','test',NULL,NULL,NULL,NULL,NULL,NULL),(7,NULL,NULL,'this is a test!!!',NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `daily` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `login`
---
-
-DROP TABLE IF EXISTS `login`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `login` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `login_name` varchar(45) DEFAULT NULL,
-  `password` varchar(45) DEFAULT NULL,
-  `user_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_user_login_idx` (`user_id`),
-  CONSTRAINT `fk_user_login` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `login`
---
-
-LOCK TABLES `login` WRITE;
-/*!40000 ALTER TABLE `login` DISABLE KEYS */;
-INSERT INTO `login` VALUES (1,'lafite','lafite123',1),(2,'error','error123',1),(3,'test','test123',1),(4,'yika','yika123',1),(5,'yika','yika123',1),(6,'yika','yika123',1),(8,NULL,'lafite123',5),(9,NULL,'lafite123',6),(10,NULL,'lafite123',7),(11,NULL,'lafite123',8),(12,NULL,'lafite123',9);
-/*!40000 ALTER TABLE `login` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -113,8 +94,11 @@ CREATE TABLE `user` (
   `sex` char(1) DEFAULT NULL,
   `qq` varchar(45) DEFAULT NULL,
   `phone` varchar(45) DEFAULT NULL,
+  `login_name` varchar(45) DEFAULT NULL,
+  `password` varchar(45) DEFAULT NULL,
+  `type` char(1) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -123,7 +107,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'LafiteHao','80-01-07','M','375199496','18554653013'),(2,'LafiteHao','80-01-07','M','375199496','18554653013'),(3,'LafiteHao','80-01-07','M','375199496','18554653013'),(4,'LafiteHao','80-01-07','M','375199496','18554653013'),(5,'LafiteHao',NULL,NULL,'375199496','18554653013'),(6,'LafiteHao',NULL,NULL,'375199496','18554653013'),(7,'LafiteHao',NULL,NULL,'375199496','18554653013'),(8,'LafiteHao',NULL,NULL,'375199496','18554653013'),(9,'LafiteHao',NULL,NULL,'375199496','18554653013');
+INSERT INTO `user` VALUES (1,'LafiteHao','80-01-07','M','375199496','18554653013','lafite','lafite123',NULL),(2,'LafiteHao','80-01-07','M','375199496','18554653013',NULL,NULL,NULL),(3,'LafiteHao','80-01-07','M','375199496','18554653013',NULL,NULL,NULL),(4,'LafiteHao','80-01-07','M','375199496','18554653013',NULL,NULL,NULL),(5,'LafiteHao',NULL,NULL,'375199496','18554653013',NULL,NULL,NULL),(6,'LafiteHao',NULL,NULL,'375199496','18554653013',NULL,NULL,NULL),(7,'LafiteHao',NULL,NULL,'375199496','18554653013',NULL,NULL,NULL),(8,'LafiteHao',NULL,NULL,'375199496','18554653013',NULL,NULL,NULL),(9,'LafiteHao',NULL,NULL,'375199496','18554653013',NULL,NULL,NULL),(10,NULL,NULL,NULL,NULL,NULL,'yika','Yika123',NULL),(11,NULL,NULL,NULL,NULL,NULL,'yika','Yika123',NULL);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -136,4 +120,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-05-11 22:30:57
+-- Dump completed on 2017-05-15 16:20:44
