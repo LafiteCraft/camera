@@ -1,0 +1,15 @@
+*.class
+
+# Package Files #
+*.war
+*.ear
+.classpath
+.project
+.tern-project
+#.gitignore
+.idea/
+.settings/
+build/
+*.iml
+target/
+out/
