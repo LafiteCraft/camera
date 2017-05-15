@@ -12,6 +12,9 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
+import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -132,10 +135,16 @@ public class CameraAction implements ServletRequestAware {
     public String save () {
         String result = "save_success";
         Camera camera = new Camera();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-dd-MM hh:mm:ss");
+
         camera.setName(request.getParameter("name"));
         camera.setPlace(request.getParameter("place"));
         camera.setUrl(request.getParameter("url"));
+        camera.setCode(request.getParameter("code"));
+
+        String date = request.getParameter("date");
         try {
+            camera.setTime(new Date(sdf.parse(date).getTime()));
             this.cameraService.save(camera);
         } catch (Exception e) {
             result = "error";

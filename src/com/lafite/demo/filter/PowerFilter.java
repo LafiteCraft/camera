@@ -1,6 +1,6 @@
 package com.lafite.demo.filter;
 
-import com.lafite.demo.entity.Login;
+import com.lafite.demo.entity.User;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -25,8 +25,8 @@ public class PowerFilter implements Filter{
         String path = request.getRequestURI();
 
         HttpSession session = request.getSession();
-        Login login = (Login)session.getAttribute("login");
-        if (login == null && !path.contains("user/register.action") && !path.contains("user/login.action")) {
+        User user = (User)session.getAttribute("login");
+        if (user == null && !path.contains("user/register.action") && !path.contains("user/login.action")) {
             response.sendRedirect("/login.html");
         } else {
             filterChain.doFilter(servletRequest, servletResponse);

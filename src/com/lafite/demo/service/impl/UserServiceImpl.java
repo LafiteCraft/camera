@@ -1,8 +1,6 @@
 package com.lafite.demo.service.impl;
 
-import com.lafite.demo.dao.ILoginDao;
 import com.lafite.demo.dao.IUserDao;
-import com.lafite.demo.entity.Login;
 import com.lafite.demo.entity.User;
 import com.lafite.demo.service.IUserService;
 import org.springframework.stereotype.Service;
@@ -21,44 +19,39 @@ public class UserServiceImpl implements IUserService {
 
     @Resource(name = "userDao")
     private IUserDao userDao;
-    @Resource(name = "loginDao")
-    private ILoginDao loginDao;
 
     @Override
     @Transactional(readOnly = true)
-    public Login findById(String userId) throws Exception {
-        Login login = this.loginDao.findById(userId);
-        return login;
+    public User findById(String userId) throws Exception {
+        User user = this.userDao.findById(Integer.parseInt(userId));
+        return user;
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<Login> findAll() throws Exception {
-        List<Login> loginList = this.loginDao.findAll();
-        return loginList;
+    public List<User> findAll() throws Exception {
+        List<User> userList = this.userDao.findAll();
+        return userList;
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<Login> vaildate(String loginName, String password) throws Exception {
-        List<Login> loginList = this.loginDao.selectLogin(loginName);
-        return loginList;
+    public List<User> vaildate(String userName, String password) throws Exception {
+        List<User> userList = this.userDao.findByName(userName);
+        return userList;
     }
 
     @Override
     @Transactional
-    public void register(Login login) throws Exception {
-        User user = login.getUser();
+    public void register(User user) throws Exception {
         this.userDao.saveUser(user);
-        login.setUser(user);
-        this.loginDao.register(login);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public int vaildateLoginName(String login_name) throws Exception {
-        List<Login> loginList = this.loginDao.selectLogin(login_name);
-        loginList = loginList == null ? new ArrayList<>() : loginList;
-        return loginList.size();
+    public int vaildateUserName(String userName) throws Exception {
+        List<User> userList = this.userDao.findByName(userName);
+        userList = userList == null ? new ArrayList<>() : userList;
+        return userList.size();
     }
 }

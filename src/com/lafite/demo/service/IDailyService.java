@@ -18,4 +18,6 @@ public interface IDailyService {
     void remove(int id) throws Exception;
 
     void save(Daily daily) throws Exception;
+
+    void refer(Daily daily) throws Exception;
 }

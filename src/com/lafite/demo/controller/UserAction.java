@@ -1,7 +1,6 @@
 package com.lafite.demo.controller;
 
 import com.google.gson.Gson;
-import com.lafite.demo.entity.Login;
 import com.lafite.demo.entity.User;
 import com.lafite.demo.service.IUserService;
 import org.apache.struts2.ServletActionContext;
@@ -57,7 +56,7 @@ public class UserAction implements ServletRequestAware {
         String userId = request.getParameter("userId");
         String result = "find_by_id_success";
         Gson gson = new Gson();
-        Login user = null;
+        User user = null;
         PrintWriter writer = null;
         try {
             user = this.userService.findById(userId);
@@ -85,7 +84,7 @@ public class UserAction implements ServletRequestAware {
         String result = "find_all_success";
         PrintWriter writer = null;
         try {
-            List<Login> userList = this.userService.findAll();
+            List<User> userList = this.userService.findAll();
 
             HttpServletResponse response = ServletActionContext.getResponse();
             writer = response.getWriter();
@@ -117,13 +116,13 @@ public class UserAction implements ServletRequestAware {
         PrintWriter writer = null;
         try {
             int code = 0;
-            List<Login> loginList = this.userService.vaildate(loginName, password);
+            List<User> loginList = this.userService.vaildate(loginName, password);
             if (loginList.size() == 0) {
                 code = 2;
             } else if (loginList.get(0).getPassword().equals(password)) {
                 code = 1;
                 HttpSession session = request.getSession();
-                Login login = new Login();
+                User user = new User();
                 session.setAttribute("login", loginList.get(0));
             } else {
                 code = 3;
@@ -148,24 +147,23 @@ public class UserAction implements ServletRequestAware {
     @Action("register")
     public String register() {
         String result = "register_success";
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+        user = user == null ? new User() : user;
         String loginName = request.getParameter("login_name");
         String password = request.getParameter("password");
-        Login login = new Login();
-        login.setLoginName(loginName);
-        login.setPassword(password);
-
-        User user = new User();
         user.setName(request.getParameter("name"));
         user.setBirth(request.getParameter("birth"));
         user.setQq(request.getParameter("qq"));
         user.setPhone(request.getParameter("phone"));
         user.setSex(request.getParameter("sex"));
+        user.setLoginName(loginName);
+        user.setPassword(password);
 
-        login.setUser(user);
         Gson gson = new Gson();
         PrintWriter writer = null;
         try {
-            this.userService.register(login);
+            this.userService.register(user);
             HttpServletResponse response = ServletActionContext.getResponse();
             response.setHeader("Content-type", "text/html;charset=UTF-8");
             writer = response.getWriter();
@@ -185,10 +183,10 @@ public class UserAction implements ServletRequestAware {
     @Action("vaildate_name")
     public String vaildateLoginName() {
         String result = "vaildate_name_success";
-        String login_name = request.getParameter("login_name");
+        String userMame = request.getParameter("login_name");
         PrintWriter writer = null;
         try {
-            int countName = this.userService.vaildateLoginName(login_name);
+            int countName = this.userService.vaildateUserName(userMame);
             HttpServletResponse response = ServletActionContext.getResponse();
 //            response.setHeader("Content-type", "text/html;charset=UTF-8");
             writer = response.getWriter();

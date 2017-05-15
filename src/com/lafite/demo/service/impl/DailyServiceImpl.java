@@ -50,4 +50,9 @@ public class DailyServiceImpl implements IDailyService {
         this.dailyDao.saveOrUpdate(daily);
     }
 
+    @Override
+    public void refer(Daily daily) throws Exception {
+        this.dailyDao.saveOrUpdate(daily);
+    }
+
 }

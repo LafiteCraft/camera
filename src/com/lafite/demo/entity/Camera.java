@@ -1,27 +1,32 @@
 package com.lafite.demo.entity;
 
-import javax.persistence.*;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.io.Serializable;
+import java.sql.Date;
 
 /**
  * @author LafiteHao
- * @create 2017-05-09 13:49
+ * @create 2017-05-15 14:06
  **/
 @Entity
 public class Camera implements Serializable {
-    private Integer id;
+    private int id;
     private String name;
     private String place;
     private String url;
+    private String code;
+    private Date time;
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
     @Column(name = "id", nullable = false)
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -55,6 +60,26 @@ public class Camera implements Serializable {
         this.url = url;
     }
 
+    @Basic
+    @Column(name = "code", nullable = true, length = 45)
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    @Basic
+    @Column(name = "time", nullable = true)
+    public Date getTime() {
+        return time;
+    }
+
+    public void setTime(Date time) {
+        this.time = time;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -62,20 +87,24 @@ public class Camera implements Serializable {
 
         Camera camera = (Camera) o;
 
-        if (id != null ? !id.equals(camera.id) : camera.id != null) return false;
+        if (id != camera.id) return false;
         if (name != null ? !name.equals(camera.name) : camera.name != null) return false;
         if (place != null ? !place.equals(camera.place) : camera.place != null) return false;
         if (url != null ? !url.equals(camera.url) : camera.url != null) return false;
+        if (code != null ? !code.equals(camera.code) : camera.code != null) return false;
+        if (time != null ? !time.equals(camera.time) : camera.time != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
+        int result = id;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (place != null ? place.hashCode() : 0);
         result = 31 * result + (url != null ? url.hashCode() : 0);
+        result = 31 * result + (code != null ? code.hashCode() : 0);
+        result = 31 * result + (time != null ? time.hashCode() : 0);
         return result;
     }
 }

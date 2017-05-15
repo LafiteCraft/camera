@@ -28,4 +28,10 @@ public class UserDaoImpl extends BaseDao<User> implements IUserDao {
         this.save(user);
         return user;
     }
+
+    @Override
+    public List<User> findByName(String userName) throws Exception {
+        List<User> userList = this.selectByProperty("login_name", userName);
+        return userList;
+    }
 }

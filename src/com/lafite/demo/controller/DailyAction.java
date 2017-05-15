@@ -2,7 +2,7 @@ package com.lafite.demo.controller;
 
 import com.google.gson.Gson;
 import com.lafite.demo.entity.Daily;
-import com.lafite.demo.entity.Login;
+import com.lafite.demo.entity.User;
 import com.lafite.demo.service.IDailyService;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.*;
@@ -30,6 +30,7 @@ import java.util.List;
         @Result(name = "findAll_success", location = "/"),
         @Result(name = "findByTitle_success", location = "/"),
         @Result(name = "remove_success", location = "/"),
+        @Result(name = "refer_success", location = "/"),
         @Result(name = "save_success", location = "/")})
 public class DailyAction implements ServletRequestAware {
 
@@ -138,15 +139,42 @@ public class DailyAction implements ServletRequestAware {
         String result = "save_success";
         Daily daily = new Daily();
         HttpSession session = request.getSession();
-        Login login = (Login) session.getAttribute("login   ");
+        User user = (User) session.getAttribute("login   ");
         daily.setContent(request.getParameter("content"));
-        daily.setLogin(login);
+        daily.setUserByPersonId(user);
         daily.setTitle(request.getParameter("title"));
         try {
             this.dailyService.save(daily);
         } catch (Exception e) {
             result = "error";
         }
+        return result;
+    }
+
+    /**
+     * 添加日报反馈
+     * @return
+     */
+    @Action("refer")
+    public String refer () {
+        String result = "refer_success";
+        HttpSession session = request.getSession();
+
+        String id = request.getParameter("id");
+        String content = request.getParameter("content");
+        User user = (User) session.getAttribute("user");
+
+        Daily daily = new Daily();
+        daily.setId(Integer.parseInt(id));
+        daily.setContent(content);
+        daily.setUserByInquirerId(user);
+
+        try {
+            this.dailyService.refer(daily);
+        } catch (Exception e) {
+            result = "error";
+        }
+
         return result;
     }
 }
