@@ -12,6 +12,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
@@ -28,6 +29,7 @@ import java.util.List;
         @Result(name = "login_success", location = "/"),
         @Result(name = "register_success", location = "/"),
         @Result(name = "full_success", location = "/"),
+        @Result(name = "current_success", location = "/"),
         @Result(name = "vaildate_name_success", location = "/")})
 public class UserAction implements ServletRequestAware {
 
@@ -137,6 +139,35 @@ public class UserAction implements ServletRequestAware {
         } catch (Exception e) {
             result = "error";
         }
+        return result;
+    }
+
+    /**
+     * 获取当前用户信息
+     * @return
+     */
+    @Action("current_user")
+    public String currentUser () {
+        String result = "current_success";
+        HttpSession session = request.getSession();
+        Object user = session.getAttribute("user");
+        PrintWriter writer = null;
+        Gson gson = new Gson();
+        HttpServletResponse response = ServletActionContext.getResponse();
+        response.setHeader("Content-type", "text/html;charset=UTF-8");
+        try {
+            writer = response.getWriter();
+        } catch (IOException e) {
+            result = "error";
+        }
+        if (user == null) {
+            writer.print("请先登录。");
+        } else {
+            User current = (User) user;
+            writer.print(gson.toJson(current));
+        }
+        writer.flush();
+        writer.close();
         return result;
     }
 
