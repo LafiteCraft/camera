@@ -1,6 +1,7 @@
 package com.lafite.demo.controller;
 
 import com.google.gson.Gson;
+import com.lafite.demo.base.NullTool;
 import com.lafite.demo.entity.User;
 import com.lafite.demo.service.IUserService;
 import org.apache.struts2.ServletActionContext;
@@ -23,7 +24,7 @@ import java.util.List;
 @Namespace("/user")
 @ParentPackage("json-default")
 @Scope("singleton")
-@Results({@Result(name = "error", location = "error/error.jsp"),
+@Results({@Result(name = "error", location = "/error/error.jsp"),
         @Result(name = "find_by_id_success", location = "/"),
         @Result(name = "find_all_success", location = "/"),
         @Result(name = "login_success", location = "/"),
@@ -38,9 +39,11 @@ public class UserAction implements ServletRequestAware {
     private HttpServletRequest request;
 
     String[] vaildataResult;
+    private final Gson gson;
 
     public UserAction() {
         vaildataResult = "代码异常,登陆成功,用户名不存在,密码错误".split(",");
+        gson = new Gson();
     }
 
     @Override
@@ -57,7 +60,6 @@ public class UserAction implements ServletRequestAware {
     public String findById() {
         String userId = request.getParameter("userId");
         String result = "find_by_id_success";
-        Gson gson = new Gson();
         User user = null;
         PrintWriter writer = null;
         try {
@@ -65,6 +67,7 @@ public class UserAction implements ServletRequestAware {
 
             HttpServletResponse response = ServletActionContext.getResponse();
             writer = response.getWriter();
+            user = (User) NullTool.dealNull(user);
             writer.print(gson.toJson(user));
             writer.flush();
             writer.close();
@@ -82,11 +85,15 @@ public class UserAction implements ServletRequestAware {
     @Action("findAll")
     public String find() {
         String currentPage = request.getParameter("currentPage");
-        Gson gson = new Gson();
         String result = "find_all_success";
         PrintWriter writer = null;
         try {
             List<User> userList = this.userService.findAll();
+            if (userList != null && userList.size() > 0) {
+                for (User user : userList) {
+                    user = (User) NullTool.dealNull(user);
+                }
+            }
 
             HttpServletResponse response = ServletActionContext.getResponse();
             writer = response.getWriter();
@@ -110,7 +117,6 @@ public class UserAction implements ServletRequestAware {
      */
     @Action("login")
     public String login() {
-        Gson gson = new Gson();
         String result = "login_success";
         String loginName = request.getParameter("login_name");
         String password = request.getParameter("password");
@@ -124,7 +130,6 @@ public class UserAction implements ServletRequestAware {
             } else if (loginList.get(0).getPassword().equals(password)) {
                 code = 1;
                 HttpSession session = request.getSession();
-                User user = new User();
                 session.setAttribute("login", loginList.get(0));
             } else {
                 code = 3;
@@ -150,9 +155,8 @@ public class UserAction implements ServletRequestAware {
     public String currentUser () {
         String result = "current_success";
         HttpSession session = request.getSession();
-        Object user = session.getAttribute("user");
+        Object user = session.getAttribute("login");
         PrintWriter writer = null;
-        Gson gson = new Gson();
         HttpServletResponse response = ServletActionContext.getResponse();
         response.setHeader("Content-type", "text/html;charset=UTF-8");
         try {
@@ -163,7 +167,12 @@ public class UserAction implements ServletRequestAware {
         if (user == null) {
             writer.print("请先登录。");
         } else {
-            User current = (User) user;
+            User current = null;
+            try {
+                current = (User) NullTool.dealNull(user);
+            } catch (Exception e) {
+                result = "error";
+            }
             writer.print(gson.toJson(current));
         }
         writer.flush();
@@ -192,7 +201,6 @@ public class UserAction implements ServletRequestAware {
         user.setLoginName(loginName);
         user.setPassword(password);
 
-        Gson gson = new Gson();
         PrintWriter writer = null;
         try {
             this.userService.register(user);

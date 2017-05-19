@@ -1,6 +1,7 @@
 package com.lafite.demo.controller;
 
 import com.google.gson.Gson;
+import com.lafite.demo.base.NullTool;
 import com.lafite.demo.entity.Daily;
 import com.lafite.demo.entity.User;
 import com.lafite.demo.service.IDailyService;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.PrintWriter;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 /**
@@ -25,7 +27,7 @@ import java.util.List;
 @Namespace("/daily")
 @ParentPackage("json-default")
 @Scope("singleton")
-@Results({@Result(name = "error", location = "view/error.jsp"),
+@Results({@Result(name = "error", location = "error/error.jsp"),
         @Result(name = "findInfo_success", location = "/"),
         @Result(name = "findAll_success", location = "/"),
         @Result(name = "findByTitle_success", location = "/"),
@@ -37,6 +39,11 @@ public class DailyAction implements ServletRequestAware {
     @Resource(name = "dailyService")
     private IDailyService dailyService;
     private HttpServletRequest request;
+    private final Gson gson;
+
+    public DailyAction() {
+        gson = new Gson();
+    }
 
     @Override
     public void setServletRequest(HttpServletRequest httpServletRequest) {
@@ -52,13 +59,19 @@ public class DailyAction implements ServletRequestAware {
         String result = "findInfo_success";
         String id = request.getParameter("daily_id");
         PrintWriter writer = null;
-        Gson gson = new Gson();
+        String jsonResult = "";
         try {
             Daily daily = this.dailyService.findById(id);
+            if (daily != null) {
+                //报送类型
+                daily.setType(IDailyService.types[Integer.parseInt(daily.getType())]);
+                daily = (Daily) NullTool.dealNull(daily);
+                jsonResult = gson.toJson(daily);
+            }
             HttpServletResponse response = ServletActionContext.getResponse();
             response.setHeader("Content-type", "text/html;charset=UTF-8");
             writer = response.getWriter();
-            writer.print(gson.toJson(daily));
+            writer.print(jsonResult);
             writer.flush();
             writer.close();
         } catch (Exception e) {
@@ -75,13 +88,14 @@ public class DailyAction implements ServletRequestAware {
     public String findAll () {
         String result = "findAll_success";
         PrintWriter writer = null;
-        Gson gson = new Gson();
+        String jsonResult = "";
         try {
             List<Daily> dailyList = this.dailyService.findAll();
+            jsonResult = getString(jsonResult, dailyList);
             HttpServletResponse response = ServletActionContext.getResponse();
             response.setHeader("Content-type", "text/html;charset=UTF-8");
             writer = response.getWriter();
-            writer.print(gson.toJson(dailyList));
+            writer.print(jsonResult);
             writer.flush();
             writer.close();
         } catch (Exception e) {
@@ -99,19 +113,31 @@ public class DailyAction implements ServletRequestAware {
         String result = "findByTitle_success";
         String title = request.getParameter("title");
         PrintWriter writer = null;
-        Gson gson = new Gson();
+        String jsonResult = "";
         try {
             List<Daily> dailyList = this.dailyService.findByTitle(title);
+            jsonResult = getString(jsonResult, dailyList);
             HttpServletResponse response = ServletActionContext.getResponse();
             response.setHeader("Content-type", "text/html;charset=UTF-8");
             writer = response.getWriter();
-            writer.print(gson.toJson(dailyList));
+            writer.print(jsonResult);
             writer.flush();
             writer.close();
         } catch (Exception e) {
             result = "error";
         }
         return result;
+    }
+
+    private String getString(String jsonResult, List<Daily> dailyList) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
+        if(dailyList != null && dailyList.size() > 0) {
+            for (Daily daily : dailyList) {
+                daily.setType(IDailyService.types[Integer.parseInt(daily.getType())]);
+                daily = (Daily) NullTool.dealNull(daily);
+            }
+            jsonResult = gson.toJson(dailyList);
+        }
+        return jsonResult;
     }
 
     /**

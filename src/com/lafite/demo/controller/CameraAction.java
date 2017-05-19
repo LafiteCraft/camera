@@ -1,6 +1,7 @@
 package com.lafite.demo.controller;
 
 import com.google.gson.Gson;
+import com.lafite.demo.base.NullTool;
 import com.lafite.demo.entity.Camera;
 import com.lafite.demo.service.ICameraService;
 import org.apache.struts2.ServletActionContext;
@@ -13,7 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 import java.sql.Date;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -24,7 +24,7 @@ import java.util.List;
 @Namespace("/camera")
 @ParentPackage("json-default")
 @Scope("singleton")
-@Results({@Result(name = "error", location = "view/error.jsp"),
+@Results({@Result(name = "error", location = "error/error.jsp"),
         @Result(name = "findInfo_success", location = "/"),
         @Result(name = "findByName_success", location = "/"),
         @Result(name = "findAll", location = "/"),
@@ -34,6 +34,11 @@ public class CameraAction implements ServletRequestAware {
     @Resource(name = "cameraService")
     private ICameraService cameraService;
     private HttpServletRequest request;
+    private final Gson gson;
+
+    public CameraAction() {
+        gson = new Gson();
+    }
 
     @Override
     public void setServletRequest(HttpServletRequest httpServletRequest) {
@@ -49,9 +54,11 @@ public class CameraAction implements ServletRequestAware {
         String result = "findInfo_success";
         String id = request.getParameter("camera_id");
         PrintWriter writer = null;
-        Gson gson = new Gson();
         try {
             Camera camera = this.cameraService.findById(Integer.parseInt(id));
+            if (camera != null) {
+                camera = (Camera) NullTool.dealNull(camera);
+            }
             HttpServletResponse response = ServletActionContext.getResponse();
             response.setHeader("Content-type", "text/html;charset=UTF-8");
             writer = response.getWriter();
@@ -72,9 +79,13 @@ public class CameraAction implements ServletRequestAware {
     public String findAll () {
         String result = "findAll_success";
         PrintWriter writer = null;
-        Gson gson = new Gson();
         try {
             List<Camera> cameraList = this.cameraService.findAll();
+            if (cameraList != null && cameraList.size() > 0) {
+                for (Camera camera : cameraList) {
+                    camera = (Camera) NullTool.dealNull(camera);
+                }
+            }
             HttpServletResponse response = ServletActionContext.getResponse();
             response.setHeader("Content-type", "text/html;charset=UTF-8");
             writer = response.getWriter();
@@ -96,9 +107,13 @@ public class CameraAction implements ServletRequestAware {
         String result = "findByName_success";
         String name = request.getParameter("name");
         PrintWriter writer = null;
-        Gson gson = new Gson();
         try {
             List<Camera> cameraList = this.cameraService.findByName(name);
+            if (cameraList != null && cameraList.size() > 0) {
+                for (Camera camera : cameraList) {
+                    camera = (Camera) NullTool.dealNull(camera);
+                }
+            }
             HttpServletResponse response = ServletActionContext.getResponse();
             response.setHeader("Content-type", "text/html;charset=UTF-8");
             writer = response.getWriter();

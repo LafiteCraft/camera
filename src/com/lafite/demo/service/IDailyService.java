@@ -9,6 +9,8 @@ import java.util.List;
  * @date: create on 2017/5/11
  */
 public interface IDailyService {
+    String[] types = {"日报", "紧急事件", "巡逻反馈"};
+
     Daily findById(String id) throws Exception;
 
     List<Daily> findByTitle(String title) throws Exception;
