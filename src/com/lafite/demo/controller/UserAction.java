@@ -238,4 +238,34 @@ public class UserAction implements ServletRequestAware {
         }
         return result;
     }
+
+
+    /**
+     *  通过用户类型查询用户
+     * @return
+     */
+    @Action("findUserByType")
+    public String findUserByType () {
+        String result = "findUsersByType_success";
+        String userType = request.getParameter("type");
+        List<User> userList = null;
+        PrintWriter writer = null;
+        try {
+            userList = this.userService.findUserByType(userType);
+            if (userList != null && userList.size() > 0) {
+                for (User user : userList) {
+                    user = (User) NullTool.dealNull(user);
+                }
+            }
+            HttpServletResponse response = ServletActionContext.getResponse();
+//            response.setHeader("Content-type", "text/html;charset=UTF-8");
+            writer = response.getWriter();
+            writer.print(gson.toJson(userList));
+            writer.flush();
+            writer.close();
+        } catch (Exception e) {
+            result = "error";
+        }
+        return result;
+    }
 }

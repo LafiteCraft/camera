@@ -34,4 +34,10 @@ public class UserDaoImpl extends BaseDao<User> implements IUserDao {
         List<User> userList = this.selectByProperty("loginName", userName);
         return userList;
     }
+
+    @Override
+    public List<User> findByType(String type) throws Exception {
+        List<User> userList = this.selectByProperty("type", type);
+        return userList;
+    }
 }

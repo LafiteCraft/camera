@@ -17,4 +17,5 @@ public interface IUserDao {
 
     List<User> findByName(String userName) throws Exception;
 
+    List<User> findByType(String type) throws Exception;
 }

@@ -29,4 +29,11 @@ public interface IUserService {
      * @throws Exception
      */
     int vaildateUserName(String user_name) throws Exception;
+
+    /**
+     * 通过用户类型查找用户信息
+     * @return
+     * @throws Exception
+     */
+    List<User> findUserByType(String type) throws Exception;
 }
