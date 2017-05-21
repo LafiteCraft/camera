@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="static/h-ui/css/H-ui.min.css" rel="stylesheet">
+
+</head>
+<body>
+<div class="container-fluid">
+    <form method="post" class="form form-horizontal" id="">
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3">日报标题：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" name="title" id="title" readonly>
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3">日报类型：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" name="type" id="type" readonly>
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3">反馈：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <textarea class="textarea" name="feedback" id="feedback" rows="3"></textarea>
+            </div>
+        </div>
+        <div class="row cl">
+            <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+                <input class="btn btn-primary radius" type="button" value="提交" id="save">
+                <input class="btn btn-default radius" type="button" value="取消" id="close">
+            </div>
+        </div>
+    </form>
+</div>
+<script type="text/javascript" src="lib/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="static/system/js/main.js"></script>
+<script>
+    var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+    var request = GetRequest();
+    var type = request.type;
+    $.ajax({
+        url : 'daily/findInfo.action',
+        data : {
+            daily_id : request.id
+        },
+        type : 'post',
+        success : function(data){
+            var data = JSON.parse(data);
+            for(var i in data){
+                $('#' + i).val(data[i]);
+            }
+        },
+        error : function(){
+            layer.msg('服务器错误',{icon : 2});
+        }
+    });
+
+    $("#save").on("click",function(){
+        var requestData = {
+            id : request.id,
+            isRefer : 1,
+            feedback : $('#feedback').val()
+        }
+
+        $.ajax({
+            url : 'daily/refer.action	',
+            type : 'post',
+            data : requestData,
+            success : function(data){
+                if(data === '添加日报反馈成功'){
+                    layer.msg('保存成功',{icon : 1});
+                }else{
+                    layer.msg('保存失败',{icon : 2});
+                }
+                setTimeout(function(){
+                    window.parent.location.href = window.parent.location.href;
+                },1000)
+            },
+            error : function(){
+                layer.msg('保存失败',{icon : 2});
+                setTimeout(function(){parent.layer.close(index);},1000)
+            }
+        })
+    })
+
+    $("#close").on("click",function(){
+        parent.layer.close(index); //再执行关闭
+    });
+</script>
+<script>
+</script>
+</body>
+</html>

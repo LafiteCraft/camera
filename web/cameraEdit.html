@@ -8,44 +8,29 @@
 </head>
 <body>
 <div class="container-fluid">
-    <form method="post" class="form form-horizontal" id="userform">
+    <form method="post" class="form form-horizontal" id="">
         <div class="row cl">
-            <label class="form-label col-xs-4 col-sm-3">姓名：</label>
+            <label class="form-label col-xs-4 col-sm-3">摄像头编码：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" name="code" id="code" >
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3">摄像头名称：</label>
             <div class="formControls col-xs-8 col-sm-9">
                 <input type="text" class="input-text" name="name" id="name" >
             </div>
         </div>
         <div class="row cl">
-            <label class="form-label col-xs-4 col-sm-3">登录名：</label>
+            <label class="form-label col-xs-4 col-sm-3">摄像头地点：</label>
             <div class="formControls col-xs-8 col-sm-9">
-                <input type="text" class="input-text" name="loginName" id="loginName" >
+                <input type="text" class="input-text" name="place" id="place" >
             </div>
         </div>
         <div class="row cl">
-            <label class="form-label col-xs-4 col-sm-3">密码：</label>
-            <div class="formControls col-xs-8 col-sm-9">
-                <input type="password" class="input-text" name="password" id="password" >
-            </div>
-        </div>
-        <div class="row cl">
-            <label class="form-label col-xs-4 col-sm-3">性别：</label>
+            <label class="form-label col-xs-4 col-sm-3">摄像头url：</label>
             <div class="formControls skin-minimal col-xs-8 col-sm-9">
-                <input type="radio" id="male" name="sex" value="M">
-                <label>男</label>
-                <input type="radio" id="female" name="sex" value="F">
-                <label>女</label>
-            </div>
-        </div>
-        <div class="row cl">
-            <label class="form-label col-xs-4 col-sm-3">手机号码：</label>
-            <div class="formControls col-xs-8 col-sm-9">
-                <input type="text" class="input-text" name="phone" id="phone">
-            </div>
-        </div>
-        <div class="row cl">
-            <label class="form-label col-xs-4 col-sm-3">QQ：</label>
-            <div class="formControls col-xs-8 col-sm-9">
-                <input type="text" class="input-text" name="qq" id="qq">
+                <input type="text" class="input-text" name="url" id="url" >
             </div>
         </div>
         <div class="row cl">
@@ -60,31 +45,22 @@
 <script type="text/javascript" src="lib/layer/2.4/layer.js"></script>
 <script type="text/javascript" src="static/system/js/main.js"></script>
 <script>
-    var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+  var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
     var request = GetRequest();
     var type = request.type;
-
     if(type === 'edit'){
+        $('#time').attr('disabled','disabled');
         $.ajax({
-            url : 'user/findById.action',
+            url : 'camera/findInfo.action',
             data : {
-                userId : request.id
+                camera_id : request.id
             },
             type : 'post',
             success : function(data){
                 var data = JSON.parse(data);
-                console.log(data);
-                for(i in data){
-                   if(i === 'sex'){
-                       if(data[i] === 'M'){
-                            $('#male').prop('checked','checked');
-                       }else{
-                           $('#female').prop('checked','checked');
-                       }
-                   }else{
-                       $('#' + i).val(data[i]);
-                   }
-               }
+                for(var i in data){
+                    $('#' + i).val(data[i]);
+                }
             },
             error : function(){
                 layer.msg('服务器错误',{icon : 2});
@@ -93,31 +69,22 @@
     }
 
     $("#save").on("click",function(){
-        var sex = document.getElementsByName('sex');
-        for(var i = 0,l = sex.length;i <l;i++){
-            if(sex[i].checked){
-                var sexval = sex[i].value;
-            }
-        }
         var requestData = {
-            loginName : $("#loginName").val(),
-            name : $("#name").val(),
-            sex : sexval,
-            qq : $('#qq').val(),
-            phone : $('#phone').val(),
-            password : $('#password').val()
+            name : $('#name').val(),
+            code : $('#code').val(),
+            place : $('#place').val(),
+            url : $('#url').val(),
         }
         if(type === 'edit'){
             requestData.id = request.id
         }
 
         $.ajax({
-            url : 'user/register.action	',
+            url : 'camera/save.action	',
             type : 'post',
             data : requestData,
             success : function(data){
-                var data = JSON.parse(data);
-                if(data === '注册成功'){
+                if(data === '保存成功'){
                     layer.msg('保存成功',{icon : 1});
                 }else{
                     layer.msg('保存失败',{icon : 2});
@@ -135,7 +102,7 @@
 
     $("#close").on("click",function(){
         parent.layer.close(index); //再执行关闭
-    })
+    });
 </script>
 <script>
 </script>

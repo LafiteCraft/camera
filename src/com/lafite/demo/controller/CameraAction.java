@@ -27,7 +27,7 @@ import java.util.List;
 @Results({@Result(name = "error", location = "error/error.jsp"),
         @Result(name = "findInfo_success", location = "/"),
         @Result(name = "findByName_success", location = "/"),
-        @Result(name = "findAll", location = "/"),
+        @Result(name = "findAll_success", location = "/"),
         @Result(name = "remove_success", location = "/"),
         @Result(name = "save_success", location = "/")})
 public class CameraAction implements ServletRequestAware {
@@ -134,8 +134,15 @@ public class CameraAction implements ServletRequestAware {
     public String remove () {
         String result = "remove_success";
         String id = request.getParameter("camera_id");
+        PrintWriter writer = null;
         try {
             this.cameraService.delete(Integer.parseInt(id));
+            HttpServletResponse response = ServletActionContext.getResponse();
+            response.setHeader("Content-type", "text/html;charset=UTF-8");
+            writer = response.getWriter();
+            writer.print("删除成功");
+            writer.flush();
+            writer.close();
         } catch (Exception e) {
             result = "error";
         }
@@ -151,16 +158,24 @@ public class CameraAction implements ServletRequestAware {
         String result = "save_success";
         Camera camera = new Camera();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-dd-MM hh:mm:ss");
-
+        String id = request.getParameter("id");
+        if (id != null) {
+            camera.setId(Integer.parseInt(id    ));
+        }
         camera.setName(request.getParameter("name"));
         camera.setPlace(request.getParameter("place"));
         camera.setUrl(request.getParameter("url"));
         camera.setCode(request.getParameter("code"));
-
-        String date = request.getParameter("date");
+        PrintWriter writer = null;
         try {
-            camera.setTime(new Date(sdf.parse(date).getTime()));
+            camera.setTime(new Date(new java.util.Date().getTime()));
             this.cameraService.save(camera);
+            HttpServletResponse response = ServletActionContext.getResponse();
+            response.setHeader("Content-type", "text/html;charset=UTF-8");
+            writer = response.getWriter();
+            writer.print("保存成功");
+            writer.flush();
+            writer.close();
         } catch (Exception e) {
             result = "error";
         }

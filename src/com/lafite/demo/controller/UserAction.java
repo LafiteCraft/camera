@@ -144,7 +144,7 @@ public class UserAction implements ServletRequestAware {
         } catch (Exception e) {
             result = "error";
         }
-        return result;
+         return result;
     }
 
     /**
@@ -190,7 +190,11 @@ public class UserAction implements ServletRequestAware {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
         user = user == null ? new User() : user;
-        String loginName = request.getParameter("login_name");
+        String id = request.getParameter("id");
+        if (id != null) {
+            user.setId(Integer.parseInt(id));
+        }
+        String loginName = request.getParameter("loginName");
         String password = request.getParameter("password");
         user.setName(request.getParameter("name"));
         user.setBirth(request.getParameter("birth"));

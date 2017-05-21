@@ -58,8 +58,8 @@ public class UserServiceImpl implements IUserService {
                 String methodNmae = method.getName();
                 if (methodNmae.contains("get")) {
                     String fieldName = methodNmae.substring(3);
-                    Object result = method.invoke(old);
-                    if (result == null) {
+                    Object result = method.invoke(user);
+                    if (result != null) {
                         if (method.getReturnType() == String.class) {
                             clazz.getMethod("set" + fieldName, String.class).invoke(old, (String) result);
                         } else if (method.getReturnType() == Integer.class){
@@ -81,7 +81,7 @@ public class UserServiceImpl implements IUserService {
     @Transactional(readOnly = true)
     public int vaildateUserName(String userName) throws Exception {
         List<User> userList = this.userDao.findByName(userName);
-        userList = userList == null ? new ArrayList<>() : userList;
+        userList = userList == null ? new ArrayList<User>(0) : userList;
         return userList.size();
     }
 

@@ -17,10 +17,6 @@
 			</nav>
 			 <div class="Hui-article" id="app">
 				<article class="cl pd-20">
-				<!--	<div class="text-c">
-						<input type="text" class="input-text" style="width:250px" placeholder="请输入用户名称" id="" name="">
-						<button type="button" class="btn btn-success" id="" name=""><i class="Hui-iconfont">&#xe665;&nbsp;</i>查询</button>
-					</div>-->
 					<div class="cl pd-5 bg-1 bk-gray mt-20">
 						<span class="l">
 							<h5>用户列表</h5>
@@ -42,14 +38,13 @@
 						<tbody>
 							<tr v-for="(item,index) in dataList" class="text-c">
 								<td>{{index + 1}}</td>
-								<td>{{item.user.name}}</td>
+								<td>{{item.name}}</td>
 								<td>{{item.loginName}}</td>
-								<td>{{item.user.sex | isMale(item.user.sex)}}</td>
-								<td>{{item.user.phone}}</td>
-								<td>{{item.user.qq}}</td>
+								<td>{{item.sex | isMale(item.sex)}}</td>
+								<td>{{item.phone}}</td>
+								<td>{{item.qq}}</td>
 								<td class="td-manage">
 									<a title="编辑" v-on:click="goEdit(item.id)" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a>
-									<a title="删除" v-on:click="delUser(item.id)" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a>
 								</td>
 							</tr>
 						</tbody>
@@ -60,7 +55,6 @@
 			<script type="text/javascript" src="lib/jquery/1.9.1/jquery.min.js"></script> 
 			<script type="text/javascript" src="lib/layer/2.4/layer.js"></script>
 			<script type="text/javascript" src="lib/vue/vue.js" ></script>
-			<script type="text/javascript" src="lib/laypage/laypage.js" ></script>
 			<script>
 				var vm = new Vue({
 					el : '#app',
@@ -83,7 +77,6 @@
 									if(data.length === 0){
 									    layer.msg('暂无数据',{icon : 2});
 									}
-
 									vm.$set(vm,'dataList',data);
 								},
 								error : function(){

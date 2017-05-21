@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
+import java.sql.Date;
 import java.util.List;
 
 /**
@@ -132,7 +133,10 @@ public class DailyAction implements ServletRequestAware {
     private String getString(String jsonResult, List<Daily> dailyList) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
         if(dailyList != null && dailyList.size() > 0) {
             for (Daily daily : dailyList) {
-                daily.setType(IDailyService.types[Integer.parseInt(daily.getType())]);
+                String type = daily.getType();
+                if (type != null) {
+                    daily.setType(IDailyService.types[Integer.parseInt(type)]);
+                }
                 daily = (Daily) NullTool.dealNull(daily);
             }
             jsonResult = gson.toJson(dailyList);
@@ -148,8 +152,16 @@ public class DailyAction implements ServletRequestAware {
     public String remove () {
         String result = "remove_success";
         String id = request.getParameter("daily_id");
+        PrintWriter writer = null;
         try {
             this.dailyService.remove(Integer.parseInt(id));
+            HttpServletResponse response = ServletActionContext.getResponse();
+            response.setHeader("Content-type", "text/html;charset=UTF-8");
+            writer = response.getWriter();
+            writer.print("删除成功");
+            writer.flush();
+            writer.close();
+
         } catch (Exception e) {
             result = "error";
         }
@@ -165,14 +177,28 @@ public class DailyAction implements ServletRequestAware {
         String result = "save_success";
         Daily daily = new Daily();
         HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("login   ");
+        User user = (User) session.getAttribute("login");
+        String id = request.getParameter("id");
+        if (id != null) {
+            daily.setId(Integer.parseInt(id));
+        }
+        String type = request.getParameter("type");
+        daily.setType(type != null ? type : "0");
         daily.setContent(request.getParameter("content"));
+        daily.setTime(new Date(new java.util.Date().getTime()));
         daily.setUserByPersonId(user);
         daily.setPersonId(user.getId());
         daily.setPersonName(user.getName());
         daily.setTitle(request.getParameter("title"));
+        PrintWriter writer = null;
         try {
             this.dailyService.save(daily);
+            HttpServletResponse response = ServletActionContext.getResponse();
+            response.setHeader("Content-type", "text/html;charset=UTF-8");
+            writer = response.getWriter();
+            writer.print("保存成功");
+            writer.flush();
+            writer.close();
         } catch (Exception e) {
             result = "error";
         }
@@ -190,15 +216,22 @@ public class DailyAction implements ServletRequestAware {
 
         String id = request.getParameter("id");
         String feedback = request.getParameter("feedback");
-        User user = (User) session.getAttribute("user");
+        User user = (User) session.getAttribute("login");
 
-        Daily daily = new Daily();
-        daily.setId(Integer.parseInt(id));
-        daily.setFeedback(feedback);
-        daily.setUserByInquirerId(user);
-
+        PrintWriter writer = null;
         try {
+            Daily daily = this.dailyService.findById(id);
+            daily.setId(Integer.parseInt(id));
+            daily.setFeedback(feedback);
+            daily.setUserByInquirerId(user);
+            daily.setInquirerName(user.getName());
             this.dailyService.save(daily);
+            HttpServletResponse response = ServletActionContext.getResponse();
+            response.setHeader("Content-type", "text/html;charset=UTF-8");
+            writer = response.getWriter();
+            writer.print("添加日报反馈成功");
+            writer.flush();
+            writer.close();
         } catch (Exception e) {
             result = "error";
         }

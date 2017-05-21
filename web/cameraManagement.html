@@ -15,47 +15,41 @@
 			<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页
 				<span class="c-gray en">&gt;</span> 摄像头管理
 			</nav>
-			<div class="Hui-article">
+			<div class="Hui-article" id="app">
 				<article class="cl pd-20">
-					<div class="text-c">
+					<!--<div class="text-c">
 						<input type="text" class="input-text" style="width:250px" placeholder="请输入摄像头名称" id="" name="">
 						<button type="button" class="btn btn-success" id="" name=""><i class="Hui-iconfont">&#xe665;&nbsp;</i>查询</button>
-					</div>
+					</div>-->
 					<div class="cl pd-5 bg-1 bk-gray mt-20">
 						<span class="l">
 							<h5>摄像头列表</h5>
 						</span>
-						<span class="r"><button type="button" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;&nbsp;</i>添加</button></span>
+						<span class="r"><button type="button" class="btn btn-primary radius" v-on:click="editCamera()"><i class="Hui-iconfont">&#xe600;&nbsp;</i>添加</button></span>
 					</div>
 					<table class="table table-border table-bordered table-bg">
 						<thead>
 							<tr class="text-c">
-								<th width="40">序号</th>
-								<th width="150">登录名</th>
-								<th width="90">手机</th>
-								<th width="150">邮箱</th>
-								<th width="100">操作</th>
+								<th>序号</th>
+								<th>摄像头编码</th>
+								<th>摄像头名称</th>
+								<th>摄像头地点</th>
+								<th>摄像头url</th>
+								<th>购买日期</th>
+								<th>操作</th>
 							</tr>
 						</thead>
 						<tbody>
-							<tr class="text-c">
-								<td>1</td>
-								<td>admin</td>
-								<td>13000000000</td>
-								<td>admin@mail.com</td>
+							<tr v-for="(item,index) in dataList" class="text-c">
+								<td>{{index + 1}}</td>
+								<td>{{item.code}}</td>
+								<td>{{item.name}}</td>
+								<td>{{item.place}}</td>
+								<td>{{item.url}}</td>
+								<td>{{item.time}}</td>
 								<td class="td-manage">
-									<a title="编辑" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a>
-									<a title="删除" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a>
-								</td>
-							</tr>
-							<tr class="text-c">
-								<td>2</td>
-								<td>zhangsan</td>
-								<td>13000000000</td>
-								<td>admin@mail.com</td>
-								<td class="td-manage">
-									<a title="编辑" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a>
-									<a title="删除" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a>
+									<a title="编辑" v-on:click="editCamera(item.id)" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a>
+									<a title="删除" v-on:click="delCamera(item.id)" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a>
 								</td>
 							</tr>
 						</tbody>
@@ -66,19 +60,73 @@
 			<script type="text/javascript" src="lib/jquery/1.9.1/jquery.min.js"></script> 
 			<script type="text/javascript" src="lib/layer/2.4/layer.js"></script>
 			<script type="text/javascript" src="lib/laypage/laypage.js" ></script>
+			<script type="text/javascript" src="lib/vue/vue.js" ></script>
 			<script>
-				laypage({
-					cont: 'pager', //容器。值支持id名、原生dom对象，jquery对象。【如该容器为】：<div id="page1"></div>
-					pages: 10, //通过后台拿到的总页数
-					curr:  1, //当前页
-					skin: '#5a98de',
-					groups: 3,
-					jump: function(obj, first) { //触发分页后的回调
-						if(!first) {
-							curr = obj.curr;
+                var vm = new Vue({
+                    el : '#app',
+                    data : {
+                        dataList : [],
+                    },
+                    mounted : function(){
+                        this.getList();
+                    },
+                    methods : {
+                        getList : function(){
+                            $.ajax({
+                                url : 'camera/findAll.action',
+                                type : 'post',
+                                dataType : 'json',
+                                data : {
+
+                                },
+                                success : function(data){
+                                    if(data.length === 0){
+                                        layer.msg('暂无数据',{icon : 2});
+                                    }
+                                    vm.$set(vm,'dataList',data);
+                                },
+                                error : function(){
+                                    layer.msg('服务器错误！',{icon : 2});
+                                }
+                            })
+                        },
+                        editCamera : function(id) {
+                            if (id !== undefined) {
+                                var url = 'cameraEdit.html?type=edit&id=' + id;
+                                var title = '摄像头编辑'
+                            } else {
+                                var url = 'cameraEdit.html?type=add';
+                                var title = '摄像头新增'
+                            }
+                            layer.open({
+                                type: 2,
+                                content: url,
+                                title: title,
+                                area: ['450px', '300px']
+                            })
+                        },
+						delCamera : function(id){
+                            $.ajax({
+								url : 'camera/remove.action',
+								data : {camera_id : id},
+								type : 'post',
+								success : function(data){
+								    if(data === '删除成功'){
+                                        layer.msg('删除成功',{icon : 1});
+                                        setTimeout(function(){
+                                            window.location.reload();
+										},1000)
+									}else{
+								        layer.msg('删除失败',{icon : 2});
+									}
+								},
+								error : function(){
+								    layer.msg('删除失败',{icon : 2})
+								}
+							})
 						}
-					}
-				});
+                    },
+                });
 			</script>
 		</body>
 

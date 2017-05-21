@@ -48,13 +48,13 @@ public class PowerFilter implements Filter{
                     }
                 }
             } else if (path.contains("camera")){
-                if (type.equals(0)) {
+                if (type.equals("0")) {
                     response.sendRedirect("/login.html");
                 } else {
                     filterChain.doFilter(servletRequest, servletResponse);
                 }
             } else if (path.contains("daily")) {
-                if (type.equals(1)) {
+                if (type.equals("1")) {
                     filterChain.doFilter(servletRequest, servletResponse);
                 } else {
                     response.sendRedirect("/login.html");
