@@ -42,4 +42,9 @@ public class DailyDaoImpl extends BaseDao<Daily> implements IDailyDao {
     public void saveOrUpdate(Daily daily) throws Exception {
         this.save(daily);
     }
+
+    @Override
+    public List<Daily> findByType(String type) throws Exception {
+        return this.selectByProperty("type", type);
+    }
 }

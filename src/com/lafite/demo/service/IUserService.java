@@ -20,7 +20,7 @@ public interface IUserService {
      * @param user
      * @throws Exception
      */
-    void register(User user) throws Exception;
+    User register(User user) throws Exception;
 
     /**
      * 取得用户名数量用以判断是否有重复登录名

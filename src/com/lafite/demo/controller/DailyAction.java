@@ -90,8 +90,14 @@ public class DailyAction implements ServletRequestAware {
         String result = "findAll_success";
         PrintWriter writer = null;
         String jsonResult = "";
+        String type = request.getParameter("type");
+        List<Daily> dailyList = null;
         try {
-            List<Daily> dailyList = this.dailyService.findAll();
+            if (type == null) {
+                dailyList = this.dailyService.findAll();
+            } else {
+                dailyList = this.dailyService.findByType(type);
+            }
             jsonResult = getString(jsonResult, dailyList);
             HttpServletResponse response = ServletActionContext.getResponse();
             response.setHeader("Content-type", "text/html;charset=UTF-8");

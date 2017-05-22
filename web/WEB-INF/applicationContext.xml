@@ -15,9 +15,9 @@
 	<context:component-scan base-package="com.lafite.demo.dao.impl" />
 	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
 		<property name="driverClass" value="com.mysql.jdbc.Driver" />
-		<property name="jdbcUrl" value="jdbc:mysql://127.0.0.1:3308/camera" />
+		<property name="jdbcUrl" value="jdbc:mysql://127.0.0.1:3306/demo" />
 		<property name="user" value="root"></property>
-		<property name="password" value="mysql"></property>
+		<property name="password" value="root"></property>
 		<property name="minPoolSize" value="1"></property>
 		<property name="maxPoolSize" value="2"></property>
 	</bean>

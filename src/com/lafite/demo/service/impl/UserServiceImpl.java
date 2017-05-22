@@ -45,7 +45,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     @Transactional
-    public void register(User user) throws Exception {
+    public User register(User user) throws Exception {
         Integer userId = user.getId();
         Class<?> clazz = User.class;
         User old = this.userDao.findById(userId);
@@ -75,6 +75,7 @@ public class UserServiceImpl implements IUserService {
             user = old;
         }
         this.userDao.saveUser(user);
+        return user;
     }
 
     @Override
@@ -86,6 +87,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<User> findUserByType(String type) throws Exception {
         List<User> userList = this.userDao.findByType(type);
         return userList;

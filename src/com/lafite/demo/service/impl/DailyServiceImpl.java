@@ -2,7 +2,6 @@ package com.lafite.demo.service.impl;
 
 import com.lafite.demo.dao.IDailyDao;
 import com.lafite.demo.entity.Daily;
-import com.lafite.demo.entity.User;
 import com.lafite.demo.service.IDailyService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,6 +48,12 @@ public class DailyServiceImpl implements IDailyService {
     @Transactional()
     public void save(Daily daily) throws Exception {
         this.dailyDao.saveOrUpdate(daily);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Daily> findByType(String type) throws Exception {
+        return this.dailyDao.findByType(type);
     }
 
 //    @Override

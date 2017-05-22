@@ -21,5 +21,7 @@ public interface IDailyService {
 
     void save(Daily daily) throws Exception;
 
+    List<Daily> findByType(String type) throws Exception;
+
 //    void refer(Daily daily) throws Exception;
 }

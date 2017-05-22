@@ -18,4 +18,6 @@ public interface IDailyDao {
     void delete(int id) throws Exception;
 
     void saveOrUpdate(Daily daily) throws Exception;
+
+    List<Daily> findByType(String type) throws Exception;
 }

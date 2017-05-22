@@ -31,6 +31,7 @@ import java.util.List;
         @Result(name = "register_success", location = "/"),
         @Result(name = "full_success", location = "/"),
         @Result(name = "current_success", location = "/"),
+        @Result(name = "findUsersByType_success", location = "/"),
         @Result(name = "vaildate_name_success", location = "/")})
 public class UserAction implements ServletRequestAware {
 
@@ -188,7 +189,8 @@ public class UserAction implements ServletRequestAware {
     public String register() {
         String result = "register_success";
         HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
+        User user = (User) session.getAttribute("login");
+        String updateSession = request.getParameter("update");
         user = user == null ? new User() : user;
         String id = request.getParameter("id");
         if (id != null) {
@@ -207,7 +209,10 @@ public class UserAction implements ServletRequestAware {
 
         PrintWriter writer = null;
         try {
-            this.userService.register(user);
+            User newUser = this.userService.register(user);
+            if (newUser != null && "true".equals(updateSession)) {
+                session.setAttribute("login", newUser);
+            }
             HttpServletResponse response = ServletActionContext.getResponse();
             response.setHeader("Content-type", "text/html;charset=UTF-8");
             writer = response.getWriter();
