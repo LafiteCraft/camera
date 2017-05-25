@@ -231,6 +231,7 @@ public class DailyAction implements ServletRequestAware {
             daily.setFeedback(feedback);
             daily.setUserByInquirerId(user);
             daily.setInquirerName(user.getName());
+            daily.setIsRefer("1");
             this.dailyService.save(daily);
             HttpServletResponse response = ServletActionContext.getResponse();
             response.setHeader("Content-type", "text/html;charset=UTF-8");

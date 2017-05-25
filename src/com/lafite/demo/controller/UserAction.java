@@ -168,7 +168,14 @@ public class UserAction implements ServletRequestAware {
         if (user == null) {
             writer.print("请先登录。");
         } else {
+            User old = (User) user;
+            Integer id = ((User) user).getId();
             User current = null;
+            try {
+                current = this.userService.findById(id + "");
+            } catch (Exception e) {
+                result = "error";
+            }
             try {
                 current = (User) NullTool.dealNull(user);
             } catch (Exception e) {
@@ -210,9 +217,7 @@ public class UserAction implements ServletRequestAware {
         PrintWriter writer = null;
         try {
             User newUser = this.userService.register(user);
-            if (newUser != null && "true".equals(updateSession)) {
-                session.setAttribute("login", newUser);
-            }
+            session.setAttribute("login", newUser);
             HttpServletResponse response = ServletActionContext.getResponse();
             response.setHeader("Content-type", "text/html;charset=UTF-8");
             writer = response.getWriter();
